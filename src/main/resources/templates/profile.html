@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{new_layout :: layout(
+              ~{::section},
+              ~{::head/link},
+              ~{::th:block[@layout:fragment='pageScripts']}
+          )}">
+
+    <head>
+        <title>My Profile</title>
+        <link rel="stylesheet" th:href="@{/css/profile.css}">
+
+    </head>
+
+
+    <section>
+        <header class="page-header">
+            <h1>Profile Settings</h1>
+            <p>Manage your personal information and security</p>
+        </header>
+
+        <div class="profile-container">
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-icon-box"><img th:src="@{/icons/lock-key.svg}" alt="Building"></div>
+                    <div class="header-text">
+                        <h3>Reset Password</h3>
+                        <p>Change your account password</p>
+                    </div>
+                </div>
+
+                <form id="passwordForm" class="profile-form" th:action="@{/profile/change-password}" method="POST">
+
+                    <div class="form-group">
+                        <label class="form-label">Current Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" name="currentPassword" class="form-input"
+                                placeholder="Enter current password" required>
+                            <!-- <i class="ph ph-eye toggle-password"></i> -->
+                            <img th:src="@{/icons/eye.svg}" alt="eye" class="toggle-password"
+                                style="width: 20px;height: 20px;">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-label">New Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="newPassword" name="newPassword" class="form-input"
+                                placeholder="Create a strong password" required>
+                            <img th:src="@{/icons/eye.svg}" alt="eye" class="toggle-password"
+                                style="width: 20px;height: 20px;">
+                        </div>
+
+
+                        <div class="rules-container">
+                            <div id="len" class="rule"><img th:src="@{/icons/check.svg}" alt="check"
+                                    style="width: 19.2px;height: 19.2px;"> <span class="bullet">&bull;</span> At least 8
+                                characters</div>
+                            <div id="upper" class="rule"><img th:src="@{/icons/check.svg}" alt="check"
+                                    style="width: 19.2px;height: 19.2px;"> <span class="bullet">&bull;</span> One
+                                uppercase letter</div>
+                            <div id="lower" class="rule"><img th:src="@{/icons/check.svg}" alt="check"
+                                    style="width:19.2px;height: 19.2px;"><span class="bullet">&bull;</span> One
+                                lowercase letter</div>
+                            <div id="number" class="rule"><img th:src="@{/icons/check.svg}" alt="check"
+                                    style="width: 19.2px;height: 19.2px;"> <span class="bullet">&bull;</span> One number
+                            </div>
+                            <div id="special" class="rule"><img th:src="@{/icons/check.svg}" alt="check"
+                                    style="width: 19.2px;height: 19.2px;"> <span class="bullet">&bull;</span> One
+                                special character</div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
+                                placeholder="Re-enter new password" required>
+                            <img th:src="@{/icons/eye.svg}" alt="eye" class="toggle-password"
+                                style="width: 20px;height: 20px;">
+                        </div>
+                        <span id="passwordError"
+                            style="color: #ef4444; font-size: 0.75rem; margin-top: 4px; display: none;">
+                            <img th:src="@{/icons/warning-circle.svg}" alt="circle" style="width: 20px;height: 20px;">
+                            Passwords do not match!
+                        </span>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn-submit" disabled
+                        style="opacity: 0.5; cursor: not-allowed;">Update Password</button>
+                </form>
+            </div>
+        </div>
+
+        <script th:src="@{/js/profile.js}"></script>
+        <script th:src="@{/js/sweetalert.js}"></script>
+        <th:block layout:fragment="pageScripts">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                const error = [[${ param.error != null }]];
+                const errorType = '[[${param.error}]]';
+
+                if (error && errorType === 'passwordMismatch') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Passwords do not match',
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+
+                if (error && errorType === 'updateFailed') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Password update failed',
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+                /*]]>*/
+            </script>
+
+
+        </th:block>
+
+
+    </section>
+
+    </html>

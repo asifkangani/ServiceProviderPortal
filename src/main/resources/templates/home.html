@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Provider Portal</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #111827;
+        }
+
+        .container {
+        margin-top:-18px !important;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .heading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+       .logo-container {
+
+    background-color: #00acc1;
+    width: 37px;
+    height: 37px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+
+.logo-icon {
+    color: white;
+    width: 30px;
+    height: 29px;
+}
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            width: 100%;
+            text-align: center;
+            border: 3px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .form-text {
+            font-size: 14px;
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #00acc1;
+            color: white;
+            border: 1px solid #00acc1;
+        }
+
+        .btn-primary:hover {
+            background-color: #157a92;
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: #00acc1;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-outline:hover {
+            background-color: #f9fafb;
+            border-color: #00acc1;
+        }
+
+        /* ===== DIVIDER ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .divider::before {
+            margin-right: 10px;
+        }
+
+        .divider::after {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="heading">
+            <div class="logo-container">
+                <svg class="logo-icon" fill="none" stroke="currentColor"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+            </div>
+            <h1>Service Provider Portal</h1>
+        </div>
+        <p class="subtitle">Sign in or register Organization</p>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+        <h2>Welcome</h2>
+
+        <p class="form-text">Access your Organization account</p>
+        <a th:href="@{/signin}" class="btn btn-primary">Sign In</a>
+
+        <div class="divider">OR</div>
+
+        <p class="form-text">Create a new Organization</p>
+        <a th:href="@{/register}" class="btn btn-outline">Register</a>
+        <input type="hidden" id="portalUrl" th:value="${portalUrl}" />
+    </div>
+
+</div>
+    <script th:src="@{/js/sweetalert.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var unauthorized   = [[${param.unauthorized != null}]];
+    var sessionExpired = [[${param.sessionExpired != null}]];
+    var portalUrl      = document.getElementById("portalUrl").value;
+
+    if (sessionExpired) {
+        Swal.fire({
+            icon: "warning",
+            title: "Session Expired",
+            text: "Your session has expired. Please sign in again.",
+            confirmButtonColor: "#00acc1",
+            confirmButtonText: "OK",
+            allowOutsideClick: false
+        }).then(() => {
+            window.location.href = portalUrl;
+        });
+    }
+
+    else if (unauthorized) {
+        Swal.fire({
+            icon: "warning",
+            title: "Unauthorized",
+            text: "Please sign in to continue",
+            confirmButtonColor: "#00acc1",
+            confirmButtonText: "OK",
+            allowOutsideClick: false
+        }).then(() => {
+            window.location.href = portalUrl;
+        });
+    }
+
+/*]]>*/
+</script>
+
+
+</body>
+</html>

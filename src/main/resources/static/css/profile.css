@@ -1,0 +1,163 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 0.9rem;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    transition: all 0.25s ease;
+}
+
+.profile-card:hover {
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+.profile-card-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.profile-icon-box {
+    width: 56px;
+    height: 56px;
+    background-color: #ecfeff;
+    color: var(--primary-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-icon-box i {
+    font-size: 26px;
+}
+
+.profile-form {
+    display: grid;
+    gap: 18px;
+    max-width: 600px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* Input Wrapper for Eye Icon */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-input {
+    padding: 12px 40px 12px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    cursor: pointer;
+    color: #94a3b8;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+.btn-submit {
+    font-size: 0.85rem;
+    padding: 12px 24px;
+    border-radius: 8px;
+    background-color: var(--primary-color, #0d9488);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    width: fit-content;
+    transition: all 0.3s;
+}
+
+/* --- STYLED RULES BOX (Matches Image) --- */
+.rules-container {
+    background-color: #f8fafc;
+    /* Light gray-blue background */
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rule {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    /* Default gray */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+
+.rule img {
+    display: none;
+}
+
+
+.rule .bullet {
+    display: inline;
+}
+
+
+.rule.valid {
+    color: #059669; /* green */
+}
+
+.rule.valid img {
+    display: inline;
+}
+
+.rule.valid .bullet {
+    display: none;
+}
+
+
+.rule.invalid {
+    color: #ef4444;
+}
+
+
+#passwordError {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+}

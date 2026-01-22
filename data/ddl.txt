@@ -1,0 +1,160 @@
+
+========================spp_meta_software_names======================
+
+CREATE TABLE public.spp_meta_software_names (
+	id bigserial NOT NULL,
+	display_name varchar(100) NOT NULL,
+	value varchar(100) NULL,
+	CONSTRAINT spp_meta_software_names_pkey PRIMARY KEY (id)
+);
+
+INSERT INTO public.spp_meta_software_names
+(id, display_name, value)
+VALUES(1, 'Enterprise Gateway', 'ENTERPRISE_GATEWAY');
+
+
+
+========================spp_vg_auditor_details======================
+
+CREATE TABLE public.spp_vg_auditor_details (
+	id bigserial NOT NULL,
+	auditor_document_number varchar(255) NULL,
+	auditor_name varchar(255) NULL,
+	auditor_official_email varchar(255) NULL,
+	created_on varchar(255) NULL,
+	org_details_id int8 NULL,
+	updated_on varchar(255) NULL,
+	CONSTRAINT spp_vg_auditor_details_pkey PRIMARY KEY (id)
+);
+
+
+
+=================spp_vg_organisation_categories===============================
+
+CREATE TABLE public.spp_vg_organisation_categories (
+	id serial4 NOT NULL,
+	category_name varchar(255) NULL,
+	label_name varchar(255) NULL,
+	CONSTRAINT spp_vg_organisation_categories_pkey PRIMARY KEY (id)
+);
+INSERT INTO public.spp_vg_organisation_categories
+(id, category_name, label_name)
+VALUES(1, 'government', 'Government');
+INSERT INTO public.spp_vg_organisation_categories
+(id, category_name, label_name)
+VALUES(2, 'private', 'Private');
+INSERT INTO public.spp_vg_organisation_categories
+(id, category_name, label_name)
+VALUES(3, 'ngo', 'NGO');
+INSERT INTO public.spp_vg_organisation_categories
+(id, category_name, label_name)
+VALUES(4, 'trust', 'Trust');
+
+
+
+===============spp_vg_organization_details======================================
+
+CREATE TABLE `spp_vg_organization_details` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_on` varchar(255) DEFAULT NULL,
+  `tax_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `org_name` varchar(255) DEFAULT NULL,
+  `reg_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `org_type` varchar(255) DEFAULT NULL,
+  `ouid` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `updated_on` varchar(255) DEFAULT NULL,
+  `org_email` varchar(100) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `org_added_by_admin` tinyint DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ;
+
+
+
+======================spp_vg_password_reset_token========================================
+
+CREATE TABLE public.spp_vg_password_reset_token (
+	id bigserial NOT NULL,
+	"token" varchar(255) NOT NULL,
+	email varchar(255) NOT NULL,
+	expiry_time varchar(50) NOT NULL,
+	used bool DEFAULT false NULL,
+	CONSTRAINT spp_vg_password_reset_token_pkey PRIMARY KEY (id),
+	CONSTRAINT uk_password_reset_token_token UNIQUE (token)
+);
+
+
+===================spp_vg_softwares========================================
+CREATE TABLE public.spp_vg_softwares (
+	software_id serial4 NOT NULL,
+	file_name varchar(100) NULL,
+	software_version varchar(100) NULL,
+	download_link varchar(100) NULL,
+	install_manual varchar(100) NULL,
+	software_name varchar(100) NULL,
+	size_of_software varchar(100) NULL,
+	status varchar(100) NULL,
+	created_on varchar(100) NULL,
+	updated_on varchar(100) NULL,
+	published_on varchar(100) NULL,
+	CONSTRAINT spp_vg_softwares_pkey PRIMARY KEY (software_id)
+);
+
+
+
+=====================spp_vg_spoc_details============================
+
+CREATE TABLE public.spp_vg_spoc_details (
+	id bigserial NOT NULL,
+	created_on varchar(255) NULL,
+	org_details_id int8 NULL,
+	spoc_document_number varchar(255) NULL,
+	spoc_name varchar(255) NULL,
+	spoc_official_email varchar(255) NULL,
+	updated_on varchar(255) NULL,
+	CONSTRAINT spp_vg_spoc_details_pkey PRIMARY KEY (id)
+);
+
+
+=====================spp_vg_trusted_users==========================
+
+CREATE TABLE public.spp_vg_trusted_users (
+	id bigserial NOT NULL,
+	created_on varchar(255) NULL,
+	email varchar(255) NULL,
+	"password" varchar(255) NULL,
+	updated_on varchar(255) NULL,
+	"name" varchar(100) NULL,
+	mobile_number varchar(100) NULL,
+	CONSTRAINT spp_vg_trusted_users_pkey PRIMARY KEY (id)
+);
+================spp_vg_meta_documents=========================
+
+CREATE TABLE `spp_vg_meta_documents` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `document_label` varchar(255) NOT NULL,
+  `document_type` varchar(255) DEFAULT NULL,
+  `document_size_kb` bigint DEFAULT '10240',
+  `is_mandatory` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+);
+
+==================spp_vg_documents===================
+CREATE TABLE `spp_vg_documents` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `org_id` bigint NOT NULL,
+  `meta_document_id` bigint NOT NULL,
+  `document_name` varchar(255) DEFAULT NULL,
+  `document_data` longtext NOT NULL,
+  `content_type` varchar(50) DEFAULT NULL,
+  `created_on` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_org` (`org_id`),
+  KEY `fk_meta` (`meta_document_id`),
+  CONSTRAINT `fk_meta` FOREIGN KEY (`meta_document_id`) REFERENCES `spp_vg_meta_documents` (`id`),
+  CONSTRAINT `fk_org` FOREIGN KEY (`org_id`) REFERENCES `spp_vg_organization_details` (`id`)
+);
+
+
+new changes spp_vg_organization_details(replace),spp_vg_meta_documentsspp_vg_documents

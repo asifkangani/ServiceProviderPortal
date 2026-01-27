@@ -69,6 +69,7 @@
 
                 <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}"
                     th:value="${_csrf.token}" />
+                    
 
                 <button type="submit" class="btn-signin">Sign in</button>
             </form>
@@ -86,6 +87,66 @@
     <script th:src="@{/js/sweetalert.js}"></script>
     <script th:src="@{/js/loader.js}"></script>
     <script th:src="@{/js/signin.js}"></script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var hasError = [[${ param.error != null }]];
+        const pwdChanged = [[${ param.passwordChanged != null }]];
+
+        if (pwdChanged) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Password Updated',
+                text: 'Please login again with your new password',
+                confirmButtonColor: '#0ea5b7'
+            });
+        }
+
+        if (hasError) {
+            Swal.fire({
+                icon: "error",
+                title: "Login Failed",
+                text: "Invalid email or password",
+                confirmButtonColor: "#00acc1"
+            }).then(() => {
+
+                window.location.href = /*[[@{/}]]*/ portalUrl + "/";
+            });
+        }
+
+        var unauthorized = [[${ param.unauthorized != null }]];
+        var sessionExpired = [[${ param.sessionExpired != null }]];
+        var portalUrl = document.getElementById("portalUrl").value;
+
+        if (sessionExpired) {
+            Swal.fire({
+                icon: "warning",
+                title: "Session Expired",
+                text: "Your session has expired. Please sign in again.",
+                confirmButtonColor: "#00acc1",
+                confirmButtonText: "OK",
+                allowOutsideClick: false
+            }).then(() => {
+                window.location.href = portalUrl + "/";
+            });
+        }
+
+        else if (unauthorized) {
+            Swal.fire({
+                icon: "warning",
+                title: "Unauthorized",
+                text: "Please sign in to continue",
+                confirmButtonColor: "#00acc1",
+                confirmButtonText: "OK",
+                allowOutsideClick: false
+            }).then(() => {
+                window.location.href = portalUrl + "/";
+            });
+        }
+
+        /*]]>*/
+
+    </script>
 </body>
 
 </html>

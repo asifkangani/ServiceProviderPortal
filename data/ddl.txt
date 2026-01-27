@@ -54,21 +54,21 @@ VALUES(4, 'trust', 'Trust');
 
 ===============spp_vg_organization_details======================================
 
-CREATE TABLE `spp_vg_organization_details` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `created_on` varchar(255) DEFAULT NULL,
-  `tax_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `org_name` varchar(255) DEFAULT NULL,
-  `reg_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `org_type` varchar(255) DEFAULT NULL,
-  `ouid` varchar(255) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL,
-  `updated_on` varchar(255) DEFAULT NULL,
-  `org_email` varchar(100) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `org_added_by_admin` tinyint DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ;
+CREATE TABLE public.spp_vg_organization_details (
+	id bigserial NOT NULL,
+	created_on varchar(255) NULL,
+	tax_number varchar(255) NULL,
+	org_name varchar(255) NULL,
+	reg_no varchar(255) NULL,
+	org_type varchar(255) NULL,
+	ouid varchar(255) NULL,
+	status varchar(255) NULL,
+	updated_on varchar(255) NULL,
+	org_email varchar(100) NULL,
+	address varchar(255) NULL,
+	org_added_by_admin bool NULL,
+	CONSTRAINT spp_vg_organization_details_pkey PRIMARY KEY (id)
+);
 
 
 
@@ -131,30 +131,28 @@ CREATE TABLE public.spp_vg_trusted_users (
 );
 ================spp_vg_meta_documents=========================
 
-CREATE TABLE `spp_vg_meta_documents` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `document_label` varchar(255) NOT NULL,
-  `document_type` varchar(255) DEFAULT NULL,
-  `document_size_kb` bigint DEFAULT '10240',
-  `is_mandatory` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
+CREATE TABLE public.spp_vg_meta_documents (
+	id bigserial NOT NULL,
+	document_label varchar(255) NOT NULL,
+	document_type varchar(255) NULL,
+	document_size_kb int8 DEFAULT 10240 NULL,
+	is_mandatory bool DEFAULT false NULL,
+	CONSTRAINT spp_vg_meta_documents_pkey PRIMARY KEY (id)
 );
 
 ==================spp_vg_documents===================
-CREATE TABLE `spp_vg_documents` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `org_id` bigint NOT NULL,
-  `meta_document_id` bigint NOT NULL,
-  `document_name` varchar(255) DEFAULT NULL,
-  `document_data` longtext NOT NULL,
-  `content_type` varchar(50) DEFAULT NULL,
-  `created_on` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_org` (`org_id`),
-  KEY `fk_meta` (`meta_document_id`),
-  CONSTRAINT `fk_meta` FOREIGN KEY (`meta_document_id`) REFERENCES `spp_vg_meta_documents` (`id`),
-  CONSTRAINT `fk_org` FOREIGN KEY (`org_id`) REFERENCES `spp_vg_organization_details` (`id`)
+CREATE TABLE public.spp_vg_documents (
+	id bigserial NOT NULL,
+	org_id int8 NOT NULL,
+	meta_document_id int8 NOT NULL,
+	document_name varchar(255) NULL,
+	document_data text NOT NULL,
+	content_type varchar(50) NULL,
+	created_on varchar(255) NULL,
+	CONSTRAINT spp_vg_documents_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_spp_vg_documents_meta FOREIGN KEY (meta_document_id) REFERENCES public.spp_vg_meta_documents(id) ON DELETE RESTRICT,
+	CONSTRAINT fk_spp_vg_documents_org FOREIGN KEY (org_id) REFERENCES public.spp_vg_organization_details(id) ON DELETE CASCADE
 );
 
 
-new changes spp_vg_organization_details(replace),spp_vg_meta_documentsspp_vg_documents
+

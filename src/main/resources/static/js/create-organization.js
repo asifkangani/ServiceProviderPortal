@@ -1,9 +1,9 @@
 
 
 let currentStep = 1;
-let metaDocuments = []; 
-const fileStore = {};   
-
+let metaDocuments = [];
+const fileStore = {};
+const portalUrl = document.getElementById('portalUrl')?.value || '';
 /**
  * 1. INITIALIZATION
  */
@@ -48,7 +48,8 @@ function changeStep(n) {
  */
 async function fetchMetaDocuments() {
     try {
-        const response = await fetch("/api/public/meta-documents");
+        // const response = await fetch("/api/public/meta-documents");
+        const response = await fetch(portalUrl + "/api/public/meta-documents");
         const data = await response.json();
         if (data.success) {
             metaDocuments = data.result;
@@ -59,49 +60,6 @@ async function fetchMetaDocuments() {
     }
 }
 
-// function renderDocumentFields() {
-//     const container = document.getElementById('dynamicDocumentsContainer');
-//     if (!container) return;
-//     container.innerHTML = '';
-
-//     metaDocuments.forEach(doc => {
-//         const cardHtml = `
-//             <div class="doc-card" id="card-${doc.id}">
-//                 <div class="doc-header">
-//                     <div class="doc-info">
-//                         <h3>${doc.documentLabel.replace(/_/g, ' ')} ${doc.mandatory ? '<span class="required">*</span>' : ''}</h3>
-//                         <p>${doc.documentType.toUpperCase()} (Max ${doc.documentSizeKb}KB)</p>
-//                     </div>
-//                     <div class="doc-status-icon" id="status-icon-${doc.id}">
-//                         <img th:src="@{/icons/check-circle.svg}" style="width:20px; display:none;" id="check-${doc.id}">
-//                         <img th:src="@{/icons/files.svg}" style="width:20px;" id="file-icon-${doc.id}">
-//                     </div>
-//                 </div>
-
-//                 <!-- Success Banner (Hidden by default) -->
-//                 <div class="upload-success-banner" id="banner-${doc.id}" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; padding:10px; border-radius:8px; margin-bottom:15px; font-size:13px; align-items:center; gap:8px;">
-//                     <span style="font-weight:bold;">✓</span> Document uploaded successfully
-//                 </div>
-
-//                 <!-- Dashed Upload Zone -->
-//                 <div class="upload-zone" id="zone-${doc.id}" onclick="document.getElementById('input-${doc.id}').click()" 
-//                      style="border:1px dashed #d1d5db; border-radius:10px; padding:30px; text-align:center; cursor:pointer; background:#fff;">
-//                     <div class="upload-zone-content" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
-//                         <img th:src="@{/icons/upload-cloud.svg}" style="width:24px;">
-//                         <span id="text-${doc.id}" style="font-size:14px; color:#374151; font-weight:500;">Click to upload</span>
-//                     </div>
-//                     <input type="file" 
-//                            id="input-${doc.id}" 
-//                            style="display:none" 
-//                            accept="${doc.documentType.split(',').map(t => '.' + t.trim()).join(',')}"
-//                            onchange="handleFileSelect(event, ${doc.id})">
-//                 </div>
-//                 <div class="error-msg" id="error-${doc.id}" style="color:red; font-size:12px; margin-top:8px; display:none;"></div>
-//             </div>
-//         `;
-//         container.insertAdjacentHTML('beforeend', cardHtml);
-//     });
-// }
 function renderDocumentFields() {
     const container = document.getElementById('dynamicDocumentsContainer');
     if (!container) return;
@@ -314,14 +272,19 @@ async function submitRegistration() {
         });
 
         // 5. Send POST
-        const response = await fetch('/api/public/save', { method: 'POST', body: formData });
+        // const response = await fetch('/api/public/save', { method: 'POST', body: formData });
+        const response = await fetch(portalUrl + '/api/public/save', {
+            method: 'POST',
+            body: formData
+        });
+
 
         if (typeof hideLoader === "function") hideLoader();
 
         const result = await response.json();
         if (response.ok && result.success) {
             Swal.fire({ icon: 'success', title: 'Successful', text: result.message })
-                .then(() => window.location.href = document.getElementById('portalUrl').value + '/organizations');
+                .then(() => window.location.href = portalUrl + '/organizations');
         } else {
             Swal.fire({ icon: 'error', title: 'Failed', text: result.message || 'Server error' });
         }
@@ -339,7 +302,7 @@ async function submitRegistration() {
 function fetchCategories() {
     const select = document.getElementById("orgType");
     if (!select) return;
-    fetch("/api/public/get/all/categories")
+    fetch(portalUrl + "/api/public/get/all/categories")
         .then(res => res.json())
         .then(data => {
             if (data.success && Array.isArray(data.result)) {

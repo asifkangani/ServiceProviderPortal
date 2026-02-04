@@ -8,9 +8,11 @@ import com.example.organization.service.iface.WalletIface;
 import com.example.organization.util.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -114,5 +116,19 @@ public class AdminAPIController {
         return organizationService.getOrgCategoryandidByOrgid(orgId);
 
     }
+
+
+    @GetMapping("/download/document/by/id/{orgDetailsId}/{documentName}/{documentType}")
+    public ResponseEntity<Resource> downloadDocument(
+            @PathVariable Long orgDetailsId,
+            @PathVariable Long documentName,
+            @PathVariable String documentType) {
+
+        return organizationService.downloadDocument(
+                orgDetailsId, documentName, documentType);
+    }
+
+
+
 
 }

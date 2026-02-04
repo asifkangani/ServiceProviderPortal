@@ -1,4 +1,4 @@
-/* --- Global Layout --- */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -8,13 +8,13 @@
 
 .content-split {
     display: grid;
-    /* Make the Recent Application card (right) wider than the Organization card (left) */
+  
     grid-template-columns: 1fr 1.6fr; 
     gap: 24px;
     align-items: start;
 }
 
-/* --- Top Stat Cards (Matches Screenshot 1) --- */
+
 .stat-card-new {
     padding: 24px;
     background: #ffffff;
@@ -22,7 +22,7 @@
     border: 1.5px solid #d9dbde;
     box-shadow: 0 1px 3px rgb(0 0 0 / 26%);
     display: flex;
-    justify-content: space-between; /* Pushes text left and icon right */
+    justify-content: space-between; 
     align-items: center;    
      cursor: pointer;
 }
@@ -52,7 +52,7 @@
     line-height: 1;
 }
 
-/* Icon Background Boxes */
+
 .icon-box-bg {
     width: 48px;
     height: 48px;
@@ -62,12 +62,12 @@
     justify-content: center;
 }
 
-/* Specific colors for your icon boxes */
+
 .icon-box-bg.blue { background-color: #e0eaff; color: #3b82f6; }
 .icon-box-bg.green { background-color: #dcfce7; color: #22c55e; }
 .icon-box-bg.purple { background-color: #f3e8ff; color: #a855f7; }
 
-/* --- Manage Organizations Card (Left) --- */
+
 .action-panel {
     padding: 24px;
     border-radius: 14px;
@@ -83,7 +83,7 @@
     width: 48px;
     height: 48px;
     background-color: #ecfeff;
-    color: #06b6d4; /* primary color */
+    color: #06b6d4; 
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -105,10 +105,10 @@
     font-weight: 500;
     margin-top: 10px;
 }
-/* --- Application Status Card Refinement --- */
+
 .application-status-card {
     background: #fff;
-    padding: 32px; /* More generous padding */
+    padding: 32px;
     border-radius: 16px;
     border: 1.5px solid #d9dbde;
     box-shadow: 0 1px 3px rgb(0 0 0 / 26%);
@@ -126,21 +126,21 @@
 .status-header h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #00acc1; /* Teal color from your screenshot */
+    color: #00acc1;
     margin: 0;
 }
 
-/* Grid Layout for details */
+
 .status-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Two equal columns */
-    row-gap: 28px; /* Vertical space between rows */
+    grid-template-columns: 1fr 1fr; 
+    row-gap: 28px; 
     column-gap: 20px;
 }
 
 .detail-item label {
     font-size: 0.8rem;
-    color: #94a3b8; /* Muted gray for labels */
+    color: #94a3b8; 
     display: block;
     margin-bottom: 6px;
     font-weight: 500;
@@ -150,12 +150,12 @@
 .detail-item p {
     font-size: 1rem;
     font-weight: 600;
-    color: #1e293b; /* Darker text for values */
+    color: #1e293b; 
     margin: 0;
     line-height: 1.4;
 }
 
-/* Badge styling refinement */
+
 .status-badge {
     padding: 6px 16px;
     border-radius: 6px;
@@ -166,25 +166,29 @@
 }
 
 .status-badge.pending {
-    color: #b45309;
+    color: #d28d24;
     background: #fffbeb;
     border: none;
 }
-
+.status-badge.rejected {
+    color: #991b1b;
+    background: #fee2e2;
+    border: none;
+}
 .status-badge.active {
     color: #15803d;
     background: #f0fdf4;
 }
 
-/* Utility for alignment */
+
 .text-left {
     text-align: left;
 }
 
-/* Mobile Responsive adjustment */
+
 @media (max-width: 640px) {
     .status-grid {
-        grid-template-columns: 1fr; /* Stack on small screens */
+        grid-template-columns: 1fr; 
         row-gap: 20px;
     }
     .text-left {

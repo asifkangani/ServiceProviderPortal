@@ -61,7 +61,6 @@
     color: #0f172a;
 }
 
-/* Input Wrapper for Eye Icon */
 .input-wrapper {
     position: relative;
     display: flex;
@@ -104,10 +103,10 @@
     transition: all 0.3s;
 }
 
-/* --- STYLED RULES BOX (Matches Image) --- */
+
 .rules-container {
     background-color: #f8fafc;
-    /* Light gray-blue background */
+   
     padding: 12px;
     border-radius: 12px;
     margin-top: 10px;
@@ -119,7 +118,7 @@
 .rule {
     font-size: 0.85rem;
     color: #94a3b8;
-    /* Default gray */
+   
     display: flex;
     align-items: center;
     gap: 8px;
@@ -138,7 +137,7 @@
 
 
 .rule.valid {
-    color: #059669; /* green */
+    color: #059669; 
 }
 
 .rule.valid img {

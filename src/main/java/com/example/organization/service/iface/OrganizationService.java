@@ -4,8 +4,11 @@ package com.example.organization.service.iface;
 import com.example.organization.dto.OrganizationOnboardingDTO;
 import com.example.organization.dto.SpocOrganizationResponseDTO;
 import com.example.organization.util.ApiResponse;
+import org.springframework.core.io.Resource;
+
 import org.springframework.data.domain.Page;
-import org.springframework.util.MultiValueMap;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -14,11 +17,7 @@ import java.util.Map;
 public interface OrganizationService {
 
 
-//    ApiResponse save(OrganizationOnboardingDTO dto, MultipartFile spocAuthLetter, MultipartFile establishmentLetter);
-ApiResponse save(
-        OrganizationOnboardingDTO dto,
-        Map<String, List<MultipartFile>> documents
-);
+    ApiResponse save(OrganizationOnboardingDTO dto, Map<String, List<MultipartFile>> documents);
 
 
     ApiResponse approveOrRejectOrg(String status,Long id);
@@ -39,4 +38,7 @@ ApiResponse save(
     ApiResponse getOrgCategoryandidByOrgid(String orgId);
 
     ApiResponse getRecentOrganizationBySpocEmail(String spocEmail);
+
+
+    ResponseEntity<Resource> downloadDocument(Long orgDetailsId, Long documentId, String documentType);
 }

@@ -4,19 +4,15 @@ let currentStep = 1;
 let metaDocuments = [];
 const fileStore = {};
 const portalUrl = document.getElementById('portalUrl')?.value || '';
-/**
- * 1. INITIALIZATION
- */
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Load Org Categories for Step 1
+  
     fetchCategories();
-    // Load Document Requirements for Step 2
+  
     fetchMetaDocuments();
 });
 
-/**
- * 2. NAVIGATION & STEPPER LOGIC
- */
+
 function changeStep(n) {
     if (n === 1 && !validateCurrentStep()) return;
 
@@ -27,7 +23,7 @@ function changeStep(n) {
     currentStep += n;
     steps[currentStep - 1].classList.add("active");
 
-    // Update Stepper UI
+    
     indicators.forEach((ind, idx) => {
         ind.classList.remove("active");
         if (idx + 1 === currentStep) ind.classList.add("active");
@@ -35,7 +31,6 @@ function changeStep(n) {
         else ind.classList.remove("completed");
     });
 
-    // Handle Buttons visibility
     document.getElementById("prevBtn").style.display = currentStep === 1 ? "none" : "inline-flex";
     document.getElementById("nextBtn").style.display = currentStep === 3 ? "none" : "inline-flex";
     document.getElementById("submitBtn").style.display = currentStep === 3 ? "inline-flex" : "none";
@@ -43,13 +38,11 @@ function changeStep(n) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/**
- * 3. METADATA & DYNAMIC UI RENDERING (Step 2)
- */
+
 async function fetchMetaDocuments() {
     try {
-        // const response = await fetch("/api/public/meta-documents");
-        const response = await fetch(portalUrl + "/api/public/meta-documents");
+        
+        const response = await fetch(portalUrl + "/api/meta-documents");
         const data = await response.json();
         if (data.success) {
             metaDocuments = data.result;
@@ -102,9 +95,7 @@ function renderDocumentFields() {
         container.insertAdjacentHTML('beforeend', cardHtml);
     });
 }
-/**
- * 4. FILE SELECTION & VALIDATION
- */
+
 function handleFileSelect(event, id) {
     const file = event.target.files[0];
     const meta = metaDocuments.find(m => m.id === id);
@@ -118,7 +109,7 @@ function handleFileSelect(event, id) {
 
     if (!file) return;
 
-    // Validate Extension
+
     const ext = file.name.split('.').pop().toLowerCase();
     const allowed = meta.documentType.toLowerCase().split(',').map(s => s.trim());
 
@@ -128,14 +119,12 @@ function handleFileSelect(event, id) {
         return;
     }
 
-    // Validate Size
     if (file.size > meta.documentSizeKb * 1024) {
         showError(id, `File exceeds ${meta.documentSizeKb}KB`);
         resetFileState(id);
         return;
     }
 
-    // SUCCESS STATE (Matching Screenshot)
     errorEl.style.display = 'none';
     banner.style.display = 'flex';
     check.style.display = 'block';
@@ -144,7 +133,7 @@ function handleFileSelect(event, id) {
     zone.style.borderColor = "#10b981";
     zone.style.backgroundColor = "#f0fdf4";
 
-    // Store for submission
+   
     fileStore[meta.documentLabel] = file;
 }
 
@@ -163,26 +152,23 @@ function resetFileState(id) {
     document.getElementById(`text-${id}`).textContent = "Click to upload";
 }
 
-/**
- * 5. VALIDATION LOGIC
- */
+
 function validateCurrentStep() {
     let isValid = true;
     const container = document.getElementById(`step-${currentStep}`);
 
-    // Reset errors
     container.querySelectorAll('.error-msg').forEach(e => e.style.display = 'none');
     container.querySelectorAll('.form-input').forEach(i => i.classList.remove('error'));
 
     if (currentStep === 1) {
-        // Mandatory fields check
+       
         container.querySelectorAll('.mandatory').forEach(input => {
             if (!input.value.trim()) {
                 setInputError(input, "Required");
                 isValid = false;
             }
         });
-        // Specific Tax/Reg logic
+        
         if (document.getElementById('taxToggle').checked && !document.getElementById('taxNumber').value.trim()) {
             setInputError(document.getElementById('taxNumber'), "Required");
             isValid = false;
@@ -193,7 +179,7 @@ function validateCurrentStep() {
         }
     }
     else if (currentStep === 2) {
-        // Dynamic Doc Mandatory check
+    
         metaDocuments.forEach(doc => {
             if (doc.mandatory && !fileStore[doc.documentLabel]) {
                 showError(doc.id, "This document is mandatory");
@@ -218,9 +204,7 @@ function setInputError(input, msg) {
     if (err) { err.textContent = msg; err.style.display = 'block'; }
 }
 
-/**
- * 6. SUBMISSION
- */
+
 async function validateAndComplete(event) {
     event.preventDefault();
     if (validateCurrentStep()) {
@@ -234,10 +218,10 @@ async function submitRegistration() {
 
         const formData = new FormData();
 
-        // 1. Build Address
+  
         const fullAddress = `${document.getElementById('addr-building').value.trim()}; ${document.getElementById('addr-area').value.trim()}; ${document.getElementById('addr-country').value}; ${document.getElementById('addr-zip').value.trim()}`;
 
-        // 2. Build Auditor Obj (Optional)
+      
         let auditorObj = null;
         const audName = document.getElementById('auditor-name').value.trim();
         const audEmail = document.getElementById('auditor-email').value.trim();
@@ -246,7 +230,7 @@ async function submitRegistration() {
             auditorObj = { auditorName: audName, auditorDocumentNumber: audDoc, auditorOfficalEmail: audEmail };
         }
 
-        // 3. Construct Main DTO
+
         const dto = {
             organization: {
                 orgName: document.getElementById('orgName').value.trim(),
@@ -264,16 +248,14 @@ async function submitRegistration() {
             auditorDetails: auditorObj
         };
 
-        // Append DTO as JSON
+   
         formData.append('data', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
 
         Object.keys(fileStore).forEach(label => {
             formData.append(label, fileStore[label]);
         });
 
-        // 5. Send POST
-        // const response = await fetch('/api/public/save', { method: 'POST', body: formData });
-        const response = await fetch(portalUrl + '/api/public/save', {
+        const response = await fetch(portalUrl + '/api/save', {
             method: 'POST',
             body: formData
         });
@@ -296,9 +278,7 @@ async function submitRegistration() {
     }
 }
 
-/**
- * 7. UTILITIES
- */
+
 function fetchCategories() {
     const select = document.getElementById("orgType");
     if (!select) return;

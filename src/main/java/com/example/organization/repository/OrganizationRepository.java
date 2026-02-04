@@ -19,19 +19,14 @@ public interface OrganizationRepository extends JpaRepository<OrganizationEntity
     @Query("SELECT o FROM OrganizationEntity o WHERE o.orgAddedByAdmin = false ORDER BY o.createdOn DESC")
     List<OrganizationEntity> findAllOrgs();
 
-
     @Query(" SELECT COUNT(o) FROM OrganizationEntity o JOIN SpocEntity s ON s.orgDetailsId = o.id WHERE s.spocOfficalEmail = :email AND o.status = 'ACTIVE' ")
-    long countOrganizationsBySpocEmail(@Param("email") String email);
+    long countActiveOrganizationsBySpocEmail(@Param("email") String email);
 
+    @Query(" SELECT COUNT(o) FROM OrganizationEntity o JOIN SpocEntity s ON s.orgDetailsId = o.id WHERE s.spocOfficalEmail = :email ")
+    long countApplicationsBySpocEmail(@Param("email") String email);
 
-
-
-//    @Query(" SELECT o FROM OrganizationEntity o JOIN SpocEntity s ON o.ouid IS NOT NULL AND s.spocOfficalEmail = :email ")
-//    List<OrganizationEntity> OrganizationsBySpocEmail(@Param("email") String email);
-@Query(" SELECT o FROM OrganizationEntity o " +
-        "JOIN SpocEntity s ON s.orgDetailsId = o.id " +
-        "WHERE s.spocOfficalEmail = :email ")
-List<OrganizationEntity> OrganizationsBySpocEmail(@Param("email") String email);
+    @Query(" SELECT o FROM OrganizationEntity o JOIN SpocEntity s ON o.ouid IS NOT NULL AND s.spocOfficalEmail = :email ")
+    List<OrganizationEntity> OrganizationsBySpocEmail(@Param("email") String email);
 
 
     @Query("SELECT o.ouid, o.status, o.orgType " +
@@ -44,29 +39,10 @@ List<OrganizationEntity> OrganizationsBySpocEmail(@Param("email") String email);
     OrganizationEntity allFormByOrgUid(String orgUid);
 
 
-    // 1️⃣ Total applications (ALL orgs for SPOC)
-    @Query(" SELECT COUNT(o) FROM OrganizationEntity o " +
+    @Query(" SELECT o FROM OrganizationEntity o " +
             "JOIN SpocEntity s ON s.orgDetailsId = o.id " +
             "WHERE s.spocOfficalEmail = :email ")
-    long countAllOrganizationsBySpocEmail(@Param("email") String email);
-
-
-    // 2️⃣ Pending applications
-    @Query(" SELECT COUNT(o) FROM OrganizationEntity o " +
-            "JOIN SpocEntity s ON s.orgDetailsId = o.id " +
-            "WHERE s.spocOfficalEmail = :email " +
-            "AND o.status = 'PENDING' ")
-    long countPendingOrganizationsBySpocEmail(@Param("email") String email);
-
-
-    // 3️⃣ Approved organizations
-    @Query(" SELECT COUNT(o) FROM OrganizationEntity o " +
-            "JOIN SpocEntity s ON s.orgDetailsId = o.id " +
-            "WHERE s.spocOfficalEmail = :email " +
-            "AND o.status = 'APPROVED' ")
-    long countApprovedOrganizationsBySpocEmail(@Param("email") String email);
-
-
+    List<OrganizationEntity> getAllOrgsBySpocEmail(@Param("email") String email);
 
 
 }

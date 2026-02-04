@@ -16,7 +16,6 @@ function toggleProfileMenu(event) {
     menu.classList.toggle('show');
 }
 
-// Close dropdown when clicking outside
 document.addEventListener('click', function () {
     const menu = document.getElementById('profileMenu');
     if (menu) {

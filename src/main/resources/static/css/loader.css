@@ -1,23 +1,23 @@
-/* ===== Loader Overlay ===== */
+
 .loader-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(255, 255, 255, 0.6); /* lighter overlay */
-    backdrop-filter: blur(6px);          /* BLUR CONTENT */
+    background: rgba(255, 255, 255, 0.6); 
+    backdrop-filter: blur(6px);   
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
 
-    pointer-events: all; /* BLOCK clicks */
+    pointer-events: all;
 }
 
-/* Hide loader */
+
 .loader-overlay.hidden {
     display: none;
 }
 
-/* ===== Loader Card ===== */
+
 .loader-card {
     background: #ffffff;
     padding: 28px 34px;
@@ -30,7 +30,7 @@
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
 }
 
-/* ===== Spinner ===== */
+
 .spinner {
     width: 42px;
     height: 42px;

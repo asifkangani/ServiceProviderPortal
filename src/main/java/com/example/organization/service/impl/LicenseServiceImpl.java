@@ -1,7 +1,5 @@
 package com.example.organization.service.impl;
 
-
-import com.example.organization.controller.AdminAPIController;
 import com.example.organization.dto.ApplyLicenseDTO;
 import com.example.organization.model.OrganizationEntity;
 import com.example.organization.repository.OrganizationRepository;
@@ -13,16 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-
-
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 
 @Service
@@ -38,15 +32,12 @@ public class LicenseServiceImpl implements LicenseService {
     @Value("${generate.license}")
     String generateLicense;
 
-
     @Value("${download.license}")
     String downloadLicense;
 
     @Autowired
     APIRequestHandler apiRequestHandler;
 
-    @Value("${all.license.ouid}")
-    String allLicenseOuid;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -77,11 +68,7 @@ public class LicenseServiceImpl implements LicenseService {
                 throw new RuntimeException("Didnot get Proper resposne");
             }
 
-
-
             String content = (String) res.getResult();
-
-
 
             byte[] data = content.getBytes(StandardCharsets.UTF_8);
             Resource resource = new ByteArrayResource(data);
@@ -106,8 +93,6 @@ public class LicenseServiceImpl implements LicenseService {
     public ApiResponse applyLicense(Long orgId) {
         logger.info("{} applyLicense() for orgId={}", CLASS, orgId);
         try {
-//            OrganizationEntity org = organizationRepository.findById(orgId).orElseThrow(() ->
-//                    new RuntimeException("Organization not found"));
             OrganizationEntity org = organizationRepository.findById(orgId)
                     .orElseThrow(() -> {
                         logger.warn("{} applyLicense() Organization not found | orgId={}", CLASS, orgId);

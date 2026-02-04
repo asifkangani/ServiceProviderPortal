@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${portalName}">Service Provider Portal</title>
-    <!-- Use the Wix Font provided in your CSS -->
+   
     <link rel="stylesheet" th:href="@{/css/loader.css}">
-    <link rel="stylesheet" th:href="@{/css/new_login.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
     <link rel="stylesheet" th:href="@{/css/base.css}">
 </head>
 
@@ -21,7 +21,6 @@
 
     <div class="page-wrapper">
         <div class="auth-card">
-            <!-- Circular Logo Header -->
             <div class="logo-section">
                 <div class="logo-circle">
                     <img th:src="@{/icons/building.svg}" alt="Building Icon">
@@ -32,9 +31,6 @@
                 <p class="subtitle">Sign in to continue</p>
             </div>
 
-
-
-            <!-- Login Form -->
             <form method="post" onsubmit="showLoader()" th:action="@{/}">
 
                 <div class="input-field-group">
@@ -74,19 +70,17 @@
                 <button type="submit" class="btn-signin">Sign in</button>
             </form>
 
-            <!-- Card Footer -->
             <div class="auth-footer">
-                <a th:href="@{/new-forget-password}" class="link-secondary">Forgot password?</a>
+                <a th:href="@{/forget-password}" class="link-secondary">Forgot password?</a>
             </div>
         </div>
     </div>
 
-    <!-- Keep your existing logic scripts here -->
     <input type="hidden" id="url" th:value="${url}">
     <input type="hidden" id="portalUrl" th:value="${portalUrl}" />
     <script th:src="@{/js/sweetalert.js}"></script>
     <script th:src="@{/js/loader.js}"></script>
-    <script th:src="@{/js/signin.js}"></script>
+    <script th:src="@{/js/login.js}"></script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/

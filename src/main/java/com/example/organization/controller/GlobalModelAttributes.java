@@ -38,14 +38,6 @@ public class GlobalModelAttributes {
         String uri = request.getRequestURI();
         model.addAttribute("portalName",portalName);
 
-//        if (uri.startsWith("/dashboard")) {
-//            model.addAttribute("activePage", "dashboard");
-//        } else if (uri.startsWith("/organizations") || uri.startsWith("/organization-details") || uri.startsWith("/available-softwares")
-//                ||(uri.startsWith("/create-organization"))) {
-//            model.addAttribute("activePage", "organizations");
-//        } else if (uri.startsWith("/profile")) {
-//            model.addAttribute("activePage", "profile");
-//        }
         List<String> orgPages = List.of("/organizations", "/organization-details", "/available-softwares");
 
         if (uri.contains("/dashboard")) {

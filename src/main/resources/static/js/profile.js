@@ -1,4 +1,4 @@
-
+const portalUrl = document.getElementById('portalUrl')?.value || '';
 document.addEventListener('DOMContentLoaded', function () {
     const newPassInput = document.getElementById('newPassword');
     const confirmPassInput = document.getElementById('confirmPassword');
@@ -60,14 +60,88 @@ document.addEventListener('DOMContentLoaded', function () {
             element.classList.toggle('valid', isValid);
             element.classList.toggle('invalid', !isValid);
 
-            // if (isValid) {
-            //     element.classList.add('valid');
-            // } else {
-            //     element.classList.remove('valid');
-            // }
+       
         });
         validateAll();
     });
 
     confirmPassInput.addEventListener('input', validateAll);
 });
+
+
+document.getElementById("passwordForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    changePassword(currentPassword, newPassword, confirmPassword);
+});
+
+async function changePassword(currentPassword, newPassword, confirmPassword) {
+    try {
+        showLoader();
+
+        const requestBody = {
+            currentPassword,
+            newPassword,
+            confirmPassword
+        };
+
+        const response = await fetch(portalUrl + "/api/change-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(requestBody)
+        });
+
+
+        if (!response.ok) {
+            throw new Error("HTTP Error: " + response.status);
+        }
+
+        const data = await response.json();
+       hideLoader()
+
+        if (data.success) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Password Changed',
+                text: 'Please login again'
+            });
+
+            window.location.href = portalUrl;
+        }
+        else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: data.message || "Password change failed"
+            });
+        }
+
+    } catch (err) {
+
+        hideLoader()
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "Server error. Please try again."
+        });
+    } finally {
+         hideLoader();
+    }
+}
+
+
+
+
+
+
+
+
+
+

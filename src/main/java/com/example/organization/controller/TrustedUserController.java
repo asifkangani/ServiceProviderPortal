@@ -1,9 +1,5 @@
 package com.example.organization.controller;
 
-
-
-
-
 import com.example.organization.dto.LoginRequestDTO;
 import com.example.organization.dto.TrustedUserDTO;
 import com.example.organization.service.iface.TrustedUserService;
@@ -65,6 +61,8 @@ public class TrustedUserController {
         logger.info("{} get All trusted users ",CLASS);
         return trustedUserService.getAllTrustedUsers();
     }
+
+
 
 
 

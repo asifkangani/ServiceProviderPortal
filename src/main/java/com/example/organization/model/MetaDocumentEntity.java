@@ -23,6 +23,9 @@ public class MetaDocumentEntity {
     @Column(name = "is_mandatory")
     private boolean isMandatory;
 
+    @Column(name = "document_name")
+    private String documentName;
+
     public Long getId() {
         return id;
     }
@@ -63,6 +66,14 @@ public class MetaDocumentEntity {
         isMandatory = mandatory;
     }
 
+    public String getDocumentName() {
+        return documentName;
+    }
+
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
+    }
+
     @Override
     public String toString() {
         return "MetaDocumentEntity{" +
@@ -71,6 +82,7 @@ public class MetaDocumentEntity {
                 ", documentType='" + documentType + '\'' +
                 ", documentSizeKb=" + documentSizeKb +
                 ", isMandatory=" + isMandatory +
+                ", documentName='" + documentName + '\'' +
                 '}';
     }
 }

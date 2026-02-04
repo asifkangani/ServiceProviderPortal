@@ -24,8 +24,6 @@ public class OrganizationServicesApplication {
 		SpringApplication.run(OrganizationServicesApplication.class, args);
 	}
 
-//	@Value("${app.redis.url}")
-//	private String redisUrl;
 
 	@Value("${app.redis.hosts}")
 	private String redisHosts;
@@ -41,32 +39,6 @@ public class OrganizationServicesApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-//	@Bean
-//	public RedisConnectionFactory redisConnectionFactory() {
-//
-//		// Expect format: redis://username:password@host:port OR redis://host:port
-//		if (!redisUrl.contains("@")) {
-//			throw new IllegalStateException("Invalid Redis URL format");
-//		}
-//
-//		String hostPort = redisUrl.substring(redisUrl.lastIndexOf("@") + 1);
-//		String host = hostPort.split(":")[0];
-//		int port = Integer.parseInt(hostPort.split(":")[1]);
-//
-//		RedisStandaloneConfiguration config =
-//				new RedisStandaloneConfiguration(host, port);
-//
-//		// Redis ACL username (optional)
-//		if (redisUsername != null && !redisUsername.isBlank()
-//				&& !"default".equalsIgnoreCase(redisUsername)) {
-//			config.setUsername(redisUsername);
-//		}
-//
-//		config.setPassword(RedisPassword.of(redisPassword));
-//
-//		return new LettuceConnectionFactory(config);
-//	}
-
 
 
 	@Bean
@@ -78,7 +50,6 @@ public class OrganizationServicesApplication {
 
 		String[] hosts = redisHosts.split(",");
 
-		// ---------- SINGLE NODE ----------
 		if (hosts.length == 1) {
 			String[] hostPort = hosts[0].trim().split(":");
 			String host = hostPort[0];
@@ -94,16 +65,10 @@ public class OrganizationServicesApplication {
 			if (redisPassword != null && !redisPassword.isBlank()) {
 				config.setPassword(RedisPassword.of(redisPassword));
 			}
-//
-//				config.setUsername(redisUsername);
-//
-//
-//			config.setPassword(RedisPassword.of(redisPassword));
 
 			return new LettuceConnectionFactory(config);
 		}
 
-		// ---------- CLUSTER ----------
 		RedisClusterConfiguration clusterConfig =
 				new RedisClusterConfiguration(
 						Arrays.stream(hosts)

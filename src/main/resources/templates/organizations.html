@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{new_layout :: layout(
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
               ~{::section},
               ~{::head/link},
               ~{::th:block[@layout:fragment='pageScripts']}
@@ -9,56 +9,37 @@
         <title>My Organizations</title>
         <link rel="stylesheet" th:href="@{/css/organizations.css}">
     </head>
-
     <section>
-
-        <!-- Header -->
         <header class="page-header page-header-actions">
             <div class="header-left">
                 <h1>My Organizations</h1>
                 <p>View and manage registered organizations</p>
             </div>
 
-            <!-- <div class="header-right">
-                <a th:onclick="showLoader()" th:href="@{/create-organization}" class="btn-primary">
-                    <img th:src="@{/icons/plus-circle.svg}" style="width:22px">
-                    Create New Organization
-                </a>
-            </div> -->
         </header>
-
-        <!-- Empty State -->
         <p th:if="${organizations == null or organizations.isEmpty()}">
             No organizations found.
         </p>
-
-        <!-- Organization Cards -->
         <div class="establishment-list" th:if="${organizations != null and !organizations.isEmpty()}">
-
             <div class="est-card" th:each="org : ${organizations}">
-
                 <div class="est-icon-box">
                     <img th:src="@{/icons/buildings.svg}" style="width:22px">
                 </div>
-
                 <div class="est-content">
-
                     <div class="est-header-row">
-                        <h3 class="est-title" th:text="${org.organizationName}"></h3>
-
+                        <h3 class="est-title"
+                            th:text="${#strings.isEmpty(org.organizationName) ? 'N/A' : org.organizationName}">
+                        </h3>
                         <span class="status-badge approved" th:if="${org.status == 'ACTIVE'}">
                             Active
                         </span>
-
                         <span class="status-badge pending" th:if="${org.status == 'PENDING'}">
                             Pending
                         </span>
-
                         <span class="status-badge expired" th:if="${org.status == 'REJECTED'}">
                             Rejected
                         </span>
                     </div>
-
                     <div class="est-meta">
                         <div class="meta-row">
                             <span class="meta-label">Registration Number:</span>
@@ -76,7 +57,7 @@
 
                         <div class="meta-row">
                             <span class="meta-label">Registered:</span>
-                            <span class="meta-value" th:text="${org.createdOn}">
+                            <span class="meta-value" th:text="${org.createdOn} ?: 'N/A'">
                             </span>
                         </div>
                     </div>
@@ -96,8 +77,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Pagination -->
         <div class="pagination" th:if="${totalPages > 1}">
 
             <div class="page-info">

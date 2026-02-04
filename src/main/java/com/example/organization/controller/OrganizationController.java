@@ -1,11 +1,14 @@
 package com.example.organization.controller;
 
+import com.example.organization.dto.ChangePasswordDTO;
 import com.example.organization.dto.OrganizationOnboardingDTO;
 import com.example.organization.model.MetaDocumentEntity;
 import com.example.organization.repository.MetaDocumentRepository;
 import com.example.organization.service.iface.OrganizationService;
 import com.example.organization.service.iface.SoftwareService;
+import com.example.organization.service.iface.TrustedUserService;
 import com.example.organization.util.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import org.slf4j.Logger;
@@ -13,15 +16,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
+import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/public")
+@RequestMapping("/api")
 public class OrganizationController {
 
     private static final String CLASS = "OrganizationController";
@@ -33,6 +35,9 @@ public class OrganizationController {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    TrustedUserService trustedUserService;
+
     private final OrganizationService organizationService;
     private final SoftwareService softwareService;
     private final MetaDocumentRepository metaDocumentRepository;
@@ -42,17 +47,6 @@ public class OrganizationController {
         this.metaDocumentRepository =  metaDocumentRepository;
     }
 
-//    @PostMapping(
-//            value = "/save",
-//            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-//    )
-//    public ApiResponse save(
-//            @Valid @RequestPart("data") OrganizationOnboardingDTO dto,
-//            @RequestPart("spocAuthLetter") MultipartFile spocAuthLetter,
-//            @RequestPart("organizationLetter") MultipartFile organizationLetter) {
-//        logger.info("{} save org details ",CLASS);
-//        return organizationService.save(dto, spocAuthLetter, organizationLetter);
-//    }
 @PostMapping(
         value = "/save",
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE
@@ -81,6 +75,26 @@ public ApiResponse save(
             @RequestParam String email) {
         return organizationService.getRecentOrganizationBySpocEmail(email);
     }
+
+    @PostMapping("/change-password")
+    public ApiResponse handleChangePassword(@RequestBody ChangePasswordDTO changePasswordDTO,
+                                            Principal principal,
+                                            HttpServletRequest request) {
+
+
+        ApiResponse response = trustedUserService.changePassword(principal.getName(), changePasswordDTO.getCurrentPassword(), changePasswordDTO.getNewPassword());
+
+        if (response.isSuccess()) {
+
+            SecurityContextHolder.clearContext();
+            request.getSession().invalidate();
+
+            return response;
+        }
+
+        return response;
+    }
+
 
 
 }

@@ -1,9 +1,8 @@
-/* Layout Container */
+
 .app-container {
     display: flex;
-    flex-direction: column; /* Stack navbar on top of content */
+    flex-direction: column;
     height: 100vh;
-
     overflow: hidden;
 }
 html, body {
@@ -11,7 +10,7 @@ html, body {
     margin: 0;
     overflow: hidden; 
 }
-/* Horizontal Navbar */
+
 .navbar {
     width: 100%;
     height: 72px;
@@ -22,19 +21,16 @@ html, body {
     position: sticky;
     top: 0;
     z-index: 100;
-
-     flex-shrink: 0; /* Prevent navbar from squashing */
+     flex-shrink: 0; 
 }
 
 .navbar-container {
     width: 100%;
     padding: 0 10%;
     display: flex;
-    /* justify-content: space-between; */
     align-items: center;
 }
 
-/* Brand Section */
 .brand {
     display: flex;
     align-items: center;
@@ -51,10 +47,9 @@ html, body {
     margin: 0;
 }
 
-/* Horizontal Nav Menu */
 .nav-menu {
     display: flex;
-    flex-direction: row; /* Horizontal alignment */
+    flex-direction: row; 
     gap: 3px;
     margin-right: 9%;
 }
@@ -82,7 +77,6 @@ html, body {
     font-weight: 600;
 }
 
-/* Navbar Right (User + Logout) */
 .navbar-right {
     display: flex;
     align-items: center;
@@ -115,30 +109,11 @@ html, body {
     color: #64748b;
 }
 
-/* Modified Logout Button for Navbar */
-.logout-btn {
-    display: flex;
-    align-items: center;
-    padding: 7px 10px;
-    color: #475569;
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    cursor: pointer;
-}
 
-.logout-btn:hover {
-    background-color: #fef2f2;
-    color: #dc2626;
-    border-color: #fecaca;
-}
-
-/* Content Area Adjustments */
 .content-wrapper {
     flex: 1;
     overflow-y: auto;
     background-color: #f8fafc;
-    /* added */
     display: flex;
     flex-direction: column;
 }
@@ -148,11 +123,10 @@ html, body {
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
-    /* flex: 1; */
+
 
 }
 
-/* Icon box styling (matching your logo icon) */
 .logo-container {
     background-color:  var(--primary-color);
     width: 32px;
@@ -166,12 +140,10 @@ html, body {
 .section-icon-img {
     width: 20px;
     height: 20px;
-    /* Makes the icon white if it's black */
     filter: brightness(0) invert(1); 
     
     
 }
-
 
 .app-footer {
     flex-shrink: 0;
@@ -185,7 +157,6 @@ html, body {
     font-size: 13px;
     color: #6b7280;
 
-   
 }
 
 .footer-right {
@@ -201,8 +172,6 @@ html, body {
     width: auto;
 }
 
-
-
 .profile-dropdown {
     position: relative;
 }
@@ -215,12 +184,10 @@ html, body {
     border-radius: 30%;
 }
 
-
 .profile-btn:hover {
     background-color: #f1f5f9;
 }
 
-/* Dropdown hidden by default */
 .dropdown-menu {
     position: absolute;
     top: 120%;
@@ -236,7 +203,6 @@ html, body {
     z-index: 1000;
 }
 
-/* Visible state */
 .dropdown-menu.show {
     display: flex;
 }
@@ -258,11 +224,8 @@ html, body {
 .dropdown-item:hover {
     background-color: #f1f5f9;
 }
-
-.dropdown-item.logout {
-    color: #dc2626;
-}
-
-.dropdown-item.logout:hover {
-    background-color: #fef2f2;
+.dropdown-menu a,
+.dropdown-menu form,
+.dropdown-menu button {
+    width: 100%;
 }

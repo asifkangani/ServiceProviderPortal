@@ -59,9 +59,6 @@ public class WalletImpl implements WalletIface {
     WalletCertRequestsRepo walletCertRequestsRepo;
 
 
-
-
-
     @Override
     public ApiResponse generateWalletCert(Long id,String paymentReferenceId) {
         try{
@@ -113,9 +110,6 @@ public class WalletImpl implements WalletIface {
                 return saveWalletCertReqIntoTable(id,paymentReferenceId);
 
             }
-
-
-
 
         }catch (Exception e){
             e.printStackTrace();
@@ -260,28 +254,25 @@ public class WalletImpl implements WalletIface {
 
                 if (approvalOpt.isEmpty()) {
                     WalletCertResponseDto dto = new WalletCertResponseDto();
-                    dto.setStatus("NOT_FOUND");   // 👈 key change
+                    dto.setStatus("NOT_FOUND");
                     return new ApiResponse(true, "No certificate request found", dto);
                 }
 
                 WalletCertApprovalEntity approval = approvalOpt.get();
                 String status = approval.getStatus();
 
-                // 🔹 PENDING
                 if ("PENDING".equalsIgnoreCase(status)) {
                     WalletCertResponseDto dto = new WalletCertResponseDto();
                     dto.setStatus("PENDING");
                     return new ApiResponse(true, "Certificate pending approval", dto);
                 }
 
-                // 🔹 REJECTED
                 if ("REJECTED".equalsIgnoreCase(status)) {
                     WalletCertResponseDto dto = new WalletCertResponseDto();
                     dto.setStatus("REJECTED");
                     return new ApiResponse(true, "Certificate rejected", dto);
                 }
 
-                // 🔹 APPROVED → Call Wallet API
                 if ("APPROVED".equalsIgnoreCase(status)) {
                     return fetchWalletCertificateByOuid(organization.getOuid());
                 }
@@ -354,24 +345,6 @@ public class WalletImpl implements WalletIface {
     }
 
 
-
-//    @Override
-//    public ApiResponse renewWalletCert(Long id,String paymentReferenceId) {
-//        try{
-//            OrganizationEntity organizationEntity = organizationRepository.findById(id).orElseThrow(() ->
-//                    new ValidationException("Organization not found"));
-//
-//            ApiResponse response = callOrgWalletCert(organizationEntity.getOuid(),paymentReferenceId);
-//            if(!response.isSuccess()){
-//                return response;
-//            }
-//            return response;
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return new ApiResponse(false,"Something went wrong",null);
-//        }
-//    }
 
 
 

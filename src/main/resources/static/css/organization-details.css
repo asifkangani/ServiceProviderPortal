@@ -2,14 +2,14 @@ section[layout\\:fragment="content"] {
     font-size: 0.9rem;
 }
 
-/* ===== Layout ===== */
+
 .details-grid {
     display: grid;
     grid-template-columns: 2.5fr 1fr;
     gap: 24px;
 }
 
-/* ===== Card ===== */
+
 .card {
     background: #ffffff;
     border: 1px solid var(--border-color);
@@ -18,7 +18,7 @@ section[layout\\:fragment="content"] {
     margin-bottom: 24px;
 }
 
-/* ===== Header ===== */
+
 .header-row {
     display: flex;
     justify-content: space-between;
@@ -35,7 +35,6 @@ section[layout\\:fragment="content"] {
     width: 56px;
     height: 56px;
      background-color: #ecfeff;
-    /* background-color: #a8a4f533; */
     color: var(--primary-color);
     border-radius: 14px;
     display: flex;
@@ -92,13 +91,11 @@ h3 {
     color: #991b1b;
 }
 
-/* ===== Divider ===== */
 .divider {
     margin: 24px 0;
     border-top: 1px solid #e5e7eb;
 }
 
-/* ===== Info Grid ===== */
 .info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -122,7 +119,6 @@ h3 {
     color: #0f172a;
 }
 
-/* ===== Board of Directors ===== */
 .bod-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -182,7 +178,6 @@ h3 {
     font-weight: 500;
 }
 
-/* ===== Buttons ===== */
 .btn-primary {
     display: flex;
     justify-content: center;

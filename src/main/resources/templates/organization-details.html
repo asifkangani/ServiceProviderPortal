@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{new_layout :: layout(
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
               ~{::section},
               ~{::head/link},
               ~{::th:block[@layout:fragment='pageScripts']}
@@ -10,8 +10,6 @@
         <link rel="stylesheet" th:href="@{/css/organization-details.css}">
 
     </head>
-
-
     <section>
 
         <a th:onclick="showLoader()" th:href="@{/organizations}" class="back-link">
@@ -20,11 +18,7 @@
         </a>
 
         <div class="details-grid">
-
-
             <div>
-
-
                 <div class="card">
                     <div class="header-row">
                         <div class="header-left">
@@ -36,9 +30,6 @@
                                 </p>
                             </div>
                         </div>
-
-
-
 
                         <span class="status-badge approved" th:if="${org.status == 'ACTIVE'}">
                             <img th:src="@{/icons/check-circle.svg}" alt="Building" style="width: 13.6px;">Active
@@ -69,11 +60,9 @@
 
                         <div class="info-item">
                             <span class="info-label">Organization Email</span>
-                            <span class="info-value" th:text="${org.orgEmail}"></span>
+                            <span class="info-value"
+                                th:text="${org.orgEmail != null and org.orgEmail != '' ? org.orgEmail : 'N/A'}"></span>
                         </div>
-
-
-
 
                         <div class="info-item">
                             <span class="info-label">Corporate Office Address (Building, Street)</span>
@@ -109,22 +98,17 @@
 
                         <div class="info-item">
                             <span class="info-label">Zipcode</span>
-                            <span class="info-value" th:text="${org.address != null 
-                                and org.address.split(';').length > 3 
-                                and org.address.split(';')[3] != '' 
-                                ? org.address.split(';')[3].trim() 
-                                : 'N/A'}">
+                            <span class="info-value" th:text="${org.address == null 
+                                or org.address.split(';').length <= 3 
+                                or #strings.isEmpty(#strings.trim(org.address.split(';')[3])) 
+                                ? 'N/A' 
+                                : org.address.split(';')[3].trim()}">
                             </span>
                         </div>
 
-
-
-
-
-
                         <div class="info-item">
                             <span class="info-label">Created On</span>
-                            <span class="info-value" th:text="${org.createdOn}"></span>
+                            <span class="info-value" th:text="${org.createdOn != null ? org.createdOn : 'N/A'}"></span>
                         </div>
 
 
@@ -147,7 +131,7 @@
 
                         <div class="info-item">
                             <span class="info-label">Email</span>
-                            <span class="info-value" th:text="${org.spocOfficialEmail}"></span>
+                            <span class="info-value" th:text="${org.spocOfficialEmail != null ? org.spocOfficialEmail : 'N/A'}"></span>
                         </div>
 
                         <div class="info-item">
@@ -208,31 +192,18 @@
                     <h3>Wallet Details</h3>
                     <div class="divider"></div>
 
-                    <!-- PENDING -->
+
                     <p class="subtitle" th:if="${walletDetails.status == 'PENDING'}">
                         Wallet certificate request has been sent to admin.
                         Waiting for approval.
                     </p>
 
-                    <!-- REJECTED -->
+
                     <p class="subtitle" th:if="${walletDetails.status == 'REJECTED'}">
                         Wallet certificate has been rejected by admin.
                     </p>
 
-                    <!-- APPROVED -->
-                    <!-- <div class="info-grid" th:if="${walletDetails.status == 'APPROVED'}">
 
-                        <div class="info-item">
-                            <span class="info-label">Certificate Issue Date</span>
-                            <span class="info-value" th:text="${walletDetails.certificateIssueDate}"></span>
-                        </div>
-
-                        <div class="info-item">
-                            <span class="info-label">Certificate Expiry Date</span>
-                            <span class="info-value" th:text="${walletDetails.certificateExpiryDate}"></span>
-                        </div>
-
-                    </div> -->
 
 
 
@@ -247,13 +218,9 @@
                             <span class="info-label">Certificate Expiry Date</span>
                             <span class="info-value" th:text="${walletDetails.certificateExpiryDate}"></span>
                         </div>
-
                     </div>
 
                     <div class="info-grid" th:if="${walletDetails.status == 'EXPIRED'}">
-
-                      
-
                         <div class="info-item">
                             <span class="info-label">Certificate Issue Date</span>
                             <span class="info-value" th:text="${walletDetails.certificateIssueDate}"></span>
@@ -264,22 +231,14 @@
                             <span class="info-value" th:text="${walletDetails.certificateExpiryDate}"></span>
                         </div>
 
-                          <p class="subtitle">
+                        <p class="subtitle">
                             Wallet certificate request has been expired.
                             Please Renew wallet Certificate.
                         </p>
 
-
-
                     </div>
                 </div>
-
-
-
-
             </div>
-
-
             <div>
                 <div class="card" th:if="${org.status == 'ACTIVE'}">
                     <h3>Quick Actions</h3>
@@ -295,10 +254,7 @@
                             View Licenses
                         </a>
 
-                        <!-- <a th:if="${walletCert}" href="javascript:void(0)" class="btn-outline" th:attr="data-org-id=${org.orgDetailsId},
-            data-direct=${walletCertDirectApproval}" onclick="confirmApplyWallet(this)">
-                            Apply Wallet Certificate
-                        </a> -->
+
                         <a th:if="${walletCert 
     and (walletDetails == null or walletDetails.status == 'NOT_FOUND')}" href="javascript:void(0)" class="btn-outline"
                             th:attr="data-org-id=${org.orgDetailsId},
@@ -309,13 +265,10 @@
 
                         <a th:if="${walletCert 
     and (walletDetails.status == 'EXPIRED')}" href="javascript:void(0)" class="btn-outline" th:attr="data-org-id=${org.orgDetailsId},
-            data-direct=${walletCertAdminApproval}, data-status=${walletDetails.status}" onclick="confirmApplyWallet(this)">
+            data-direct=${walletCertAdminApproval}, data-status=${walletDetails.status}"
+                            onclick="confirmApplyWallet(this)">
                             Renew Wallet Certificate
                         </a>
-
-                      
-
-
                     </div>
                 </div>
             </div>
@@ -323,9 +276,6 @@
         </div>
 
     </section>
-
-    <!-- <th:block layout:fragment="pageScripts"></th:block> -->
-
 
     <th:block layout:fragment="pageScripts">
         <script th:src="@{/js/sweetalert.js}"></script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{new_layout :: layout(
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
               ~{::section},
               ~{::head/link},
               ~{::th:block[@layout:fragment='pageScripts']}
@@ -9,14 +9,11 @@
         <title>Dashboard</title>
         <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     </head>
-
-    <!-- CONTENT FRAGMENT -->
     <header class="page-header">
         <h1 th:text="'Welcome ' + (${userName} ?: 'User')">Welcome User</h1>
         <p>Manage your organizations and applications from your dashboard</p>
     </header>
 
-    <!-- Top Stats Cards -->
     <section class="stats-grid">
         <a th:href="@{/organizations}" th:onclick="showLoader()" style="text-decoration:none;">
             <div class="card stat-card-new">
@@ -36,6 +33,8 @@
                     <span class="card-label">Pending Applications</span>
                     <div class="stat-value" th:text="${details.pendingApplications}">0</div>
                 </div>
+
+
                 <div class="icon-box-bg green">
                     <img th:src="@{/icons/clock.svg}" style="width: 20px;">
                 </div>
@@ -57,7 +56,6 @@
     </section>
 
     <section class="content-split">
-        <!-- Manage Organizations Card -->
         <div class="card action-panel">
             <div class="panel-icon-bg">
                 <img th:src="@{/icons/buildings.svg}" style="width: 22px;">
@@ -68,13 +66,9 @@
                 Manage Organizations
             </a>
         </div>
-
-
-        <!-- Recent Application Card -->
         <div class="card application-status-card" th:if="${recentOrg != null}">
             <div class="status-header">
-                <h3>Application Status</h3>
-                <!-- Dynamic Status Badge -->
+                <h3>Recent Application Status</h3>
                 <div th:class="'status-badge ' + ${recentOrg.status.toLowerCase()}">
                     <span th:text="${recentOrg.status}">PENDING</span>
                 </div>
@@ -82,31 +76,27 @@
 
             <div class="status-content">
                 <div class="status-grid">
-                    <!-- Row 1 -->
                     <div class="detail-item">
                         <label>Organization Name</label>
-                        <p th:text="${recentOrg.orgName}">N/A</p>
+                        <p th:text="${recentOrg.orgName} ?: 'N/A'">N/A</p>
                     </div>
                     <div class="detail-item text-left">
                         <label>Type</label>
-                        <p th:text="${recentOrg.orgType}">N/A</p>
+                        <p th:text="${recentOrg.orgType} ?: 'N/A'">N/A</p>
                     </div>
-
-                    <!-- Row 2 -->
-                    <div class="detail-item">
-                        <label>Creation Date</label>
-                        <p th:text="${recentOrg.createdOn}">N/A</p>
-                    </div>
-                    <div></div> <!-- Empty spacer to keep grid alignment -->
-
-                    <!-- Row 3 -->
                     <div class="detail-item">
                         <label>Tax No.</label>
-                        <p th:text="${recentOrg.taxNumber}">N/A</p>
+                        <p th:text="${recentOrg.taxNumber} ?: 'N/A'">N/A</p>
                     </div>
+
                     <div class="detail-item text-left">
                         <label>Registration No.</label>
-                        <p th:text="${recentOrg.regNo}">N/A</p>
+                        <p th:text="${recentOrg.regNo} ?: 'N/A'">N/A</p>
+                    </div>
+                   
+                    <div class="detail-item">
+                        <label>Creation Date</label>
+                        <p th:text="${recentOrg.createdOn} ?: 'N/A'">N/A</p>
                     </div>
                 </div>
             </div>

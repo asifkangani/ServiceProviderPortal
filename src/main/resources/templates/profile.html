@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{new_layout :: layout(
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
               ~{::section},
               ~{::head/link},
               ~{::th:block[@layout:fragment='pageScripts']}
@@ -28,14 +28,14 @@
                     </div>
                 </div>
 
-                <form id="passwordForm" class="profile-form" th:action="@{/profile/change-password}" method="POST">
-
+                <form id="passwordForm" class="profile-form">
+                    
                     <div class="form-group">
                         <label class="form-label">Current Password</label>
                         <div class="input-wrapper">
-                            <input type="password" name="currentPassword" class="form-input"
+                            <input type="password" name="currentPassword" id="currentPassword" class="form-input"
                                 placeholder="Enter current password" required>
-                            <!-- <i class="ph ph-eye toggle-password"></i> -->
+                           
                             <img th:src="@{/icons/eye.svg}" alt="eye" class="toggle-password"
                                 style="width: 20px;height: 20px;">
                         </div>
@@ -91,38 +91,17 @@
                         style="opacity: 0.5; cursor: not-allowed;">Update Password</button>
                 </form>
             </div>
+            <input type="hidden" id="portalUrl" th:value="${portalUrl}" />
         </div>
+
 
         <script th:src="@{/js/profile.js}"></script>
         <script th:src="@{/js/sweetalert.js}"></script>
-        <th:block layout:fragment="pageScripts">
-            <script th:inline="javascript">
-                /*<![CDATA[*/
-                const error = [[${ param.error != null }]];
-                const errorType = '[[${param.error}]]';
-
-                if (error && errorType === 'passwordMismatch') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Passwords do not match',
-                        confirmButtonColor: '#ef4444'
-                    });
-                }
-
-                if (error && errorType === 'updateFailed') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Password update failed',
-                        confirmButtonColor: '#ef4444'
-                    });
-                }
-                /*]]>*/
-            </script>
+        <th:block layout:fragment="pageScripts"></th:block>
 
 
-        </th:block>
+
+
 
 
     </section>

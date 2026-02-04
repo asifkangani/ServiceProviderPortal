@@ -33,7 +33,6 @@ function confirmApplyLicense(btn) {
 }
 
 
-
 function confirmRenewLicense(btn) {
 
     const licenseId = btn.dataset.licenseId;

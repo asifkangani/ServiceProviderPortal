@@ -31,7 +31,6 @@
     font-size: 22px;
 }
 
-/* ===== BADGES ===== */
 .license-badge {
     position: absolute;
     top: -6px;
@@ -102,7 +101,6 @@
     gap: 10px;
 }
 
-/* ===== BUTTONS ===== */
 .btn-primary,
 .btn-outline,
 .btn-license {
@@ -119,14 +117,13 @@
     gap: 8px;
 }
 
-/* Download Software */
+
 .btn-primary {
     background: var(--primary-color);
     color: #ffffff;
     border: none;
 }
 
-/* Apply / Renew */
 .btn-outline {
     background: #ffffff;
     border: 1px solid #d1d5db;
@@ -138,7 +135,7 @@
     cursor: not-allowed;
 }
 
-/* Download License (WHITE TEXT) */
+
 .btn-license {
     background: var(--primary-color);
     color: #ffffff !important;

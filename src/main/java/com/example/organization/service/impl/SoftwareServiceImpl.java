@@ -72,11 +72,6 @@ public class SoftwareServiceImpl implements SoftwareService {
     @Value("${all.license.ouid}")
     String allLicenseOuid;
 
-    @Value("${download.license}")
-    String downloadLicense;
-
-    @Value("${generate.license}")
-    String generateLicense;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -221,10 +216,8 @@ public ApiResponse getAllSoftwares() {
 
 
             software.setFileName(zipFileName);
-//            software.setInstallManual(pdfFileName);
 
             software.setSizeOfSoftware(String.format("%.2f Kb", zipSizeKb));
-//            software.setSizeOfManual(String.format("%.2f Kb", pdfSizeKb));
 
             software.setStatus("NOT_PUBLISHED");
             software.setCreatedOn(AppUtil.getDate());
@@ -239,11 +232,6 @@ public ApiResponse getAllSoftwares() {
             return new ApiResponse(false, "Something went wrong while uploading software", null);
         }
     }
-
-
-
-
-
 
 
     private String sanitize(String input) {
@@ -294,7 +282,6 @@ public ApiResponse getAllSoftwares() {
                     contentType = "application/octet-stream";
             }
 
-            // Set response headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentLength(fileSizeInBytes);
             headers.setContentType(MediaType.parseMediaType(contentType));
@@ -336,7 +323,7 @@ public ApiResponse getAllSoftwares() {
                         new TypeReference<List<SoftwareLicenseDTO>>() {})
                         : List.of();
 
-        // group licenses by software (appid)
+
         Map<String, List<SoftwareLicenseDTO>> licenseMap = new HashMap<>();
         for (SoftwareLicenseDTO lic : licenses) {
             licenseMap
@@ -371,7 +358,6 @@ public ApiResponse getAllSoftwares() {
                 result.add(dto);
             }
 
-            // 🟢 LICENSES EXIST → ONE CARD PER LICENSE
             for (SoftwareLicenseDTO lic : swLicenses) {
 
                 SoftwareWithLicenseDTO dto = new SoftwareWithLicenseDTO();

@@ -101,7 +101,7 @@ async function startVerificationSequence() {
 }
 
 async function callEstabDetailsApi() {
-//    const url = 'http://localhost:8080/api/soap/estabDetails';
+
     const url = portalUrl + '/api/public/estabDetails';
     let requestBody = { "transactionRefNo": "TX123" };
     if (selectedType === 'dept') {
@@ -139,7 +139,6 @@ async function callEstabDetailsApi() {
 }
 
 async function callEstabOwnersApi() {
-//    const url = 'http://localhost:8080/api/soap/estabOwners';
     const url = portalUrl + '/api/public/estabOwners';
     const requestBody = {
         "transactionRefNo": "TX123",

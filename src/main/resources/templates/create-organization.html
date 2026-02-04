@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{new_layout :: layout(
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
               ~{::section},
               ~{::head/link},
               ~{::th:block[@layout:fragment='pageScripts']}
@@ -20,7 +20,7 @@
             </div>
         </header>
 
-        <!-- STEPPER UI -->
+      
         <div class="stepper-wrapper">
             <div class="stepper-item active" id="step-1-indicator">
                 <div class="step-counter">1</div>
@@ -38,7 +38,7 @@
 
         <form id="createOrgForm" onsubmit="validateAndComplete(event)" novalidate>
 
-            <!-- STEP 1: ORGANIZATION DETAILS -->
+         
             <div class="form-step active" id="step-1">
                 <div class="section-group">
                     <div class="section-title">
@@ -137,7 +137,7 @@
             </div>
 
         
-            <!-- STEP 2: DOCUMENTS -->
+          
             <div class="form-step" id="step-2">
                 <div class="section-group">
                     <div class="section-title">
@@ -147,7 +147,7 @@
                         Upload Required Documents
                     </div>
 
-                    <!-- This container will be populated via JS -->
+                
                     <div id="dynamicDocumentsContainer">
                         <div class="loading-docs" style="text-align:center; padding: 20px;">
                             Loading document requirements...
@@ -157,9 +157,9 @@
             </div>
 
 
-            <!-- STEP 3: OTHER (SPOC & AUDITOR) -->
+          
             <div class="form-step" id="step-3">
-                <!-- SPOC DETAILS -->
+             
                 <div class="section-group">
                     <div class="section-title">
                         <div class="section-icon"><img th:src="@{/icons/user.svg}" alt="Building" style="width: 21px;">
@@ -182,7 +182,6 @@
                     </div>
                 </div>
 
-                <!-- AUDITOR DETAILS -->
                 <div class="section-group">
                     <div class="section-title">
                         <div class="section-icon"><img th:src="@{/icons/user.svg}" alt="Building" style="width: 21px;">
@@ -204,7 +203,7 @@
                 </div>
             </div>
 
-            <!-- NAVIGATION BUTTONS -->
+   
             <div class="form-navigation">
                 <button type="button" class="btn-outline" id="prevBtn" onclick="changeStep(-1)"
                     style="display:none;">Back</button>
@@ -220,7 +219,7 @@
 
   <th:block layout:fragment="pageScripts">
     <script th:inline="javascript">
-        /* Resolve the paths once here so JS can use them */
+      
         window.iconPaths = {
             checkCircle: /*[[@{/icons/check-circle.svg}]]*/ '/icons/check-circle.svg',
             files: /*[[@{/icons/files.svg}]]*/ '/icons/files.svg',
@@ -233,4 +232,4 @@
 
 
 
-    </html>
+</html>

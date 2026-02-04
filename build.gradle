@@ -19,7 +19,6 @@ repositories {
 }
 
 dependencies {
-//        implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
@@ -30,13 +29,12 @@ dependencies {
 
 
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-//    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-//    implementation 'com.mysql:mysql-connector-j:8.0.33'
+
     implementation 'org.postgresql:postgresql:42.7.3'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

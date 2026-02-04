@@ -12,6 +12,5 @@ public interface SoftwareRepository extends JpaRepository<SoftwareEntity, Long> 
             String softwareName,
             String softwareVersion
     );
-    long countByStatusIgnoreCase(String status);
 
 }

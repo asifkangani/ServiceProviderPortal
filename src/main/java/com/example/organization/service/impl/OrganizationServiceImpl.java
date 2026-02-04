@@ -7,20 +7,19 @@ import com.example.organization.repository.*;
 import com.example.organization.service.iface.OrganizationService;
 import com.example.organization.util.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,17 +44,12 @@ import java.util.stream.Collectors;
     @Value("${register.organisation}")
     String registerOrganisation;
 
-    @Value("${reset.password.expiry.minutes}")
-    private long resetPasswordExpiryMinutes;
 
     @Value("${portal.url}")
     private String portalUrl;
 
     @Value("${portal.name}")
     private String portalName;
-
-    @Value("${all.license.ouid}")
-    String allLicenseOuid;
 
     @Autowired
     APIRequestHandler apiRequestHandler;
@@ -65,6 +59,7 @@ import java.util.stream.Collectors;
 
     @Autowired
     MetaDocumentRepository metaDocumentRepository;
+
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -107,177 +102,11 @@ import java.util.stream.Collectors;
         this.organisationViewIface = organisationViewIface;
         this.organizationDocumentRepository = organizationDocumentRepository;
     }
-    @Value("${file.pdf.max-size-kb}")
-    private long maxPdfSizeKb;
+
 
     @Value("${organisation.exists}")
     String organisationExists;
 
-//    @Override
-//    public ApiResponse save(OrganizationOnboardingDTO dto,
-//                            MultipartFile spocAuthLetter,
-//                            MultipartFile organizationLetter) {
-//        logger.info("{} save() organization onboarding", CLASS);
-//
-//        try {
-//
-//
-//            validatePdf(spocAuthLetter, "SPOC Authorization Letter");
-//            validatePdf(organizationLetter, "Organization Letter");
-//            logger.info("{} PDF validation completed", CLASS);
-//
-//            String regNo = dto.getOrganization().getRegNo();
-//            String taxNumber = dto.getOrganization().getTaxNumber();
-//            String orgName = dto.getOrganization().getOrgName();
-//
-//
-//            String url = organisationExists + orgName;
-//            logger.info("{} URL CALLING ::::{}" ,CLASS,url);
-//                ApiResponse res = apiRequestHandler.handleApiRequest(url, HttpMethod.GET, null);
-//                if (res != null && res.isSuccess()) {
-//                    logger.warn("{} Organization already exists orgName={}", CLASS, orgName);
-//                    return new ApiResponse(false,"Organization with this name already exists",null);
-//                }
-//                if(res!=null && res.getResult() !=null) {
-//                    Map<String, Object> result = (Map<String, Object>) res.getResult();
-//                    String taxNo = (String) result.get("taxNo");
-//                    String uniqueRegNo = (String) result.get("uniqueRegdNo");
-//
-//                    if (taxNumber != null && taxNo != null && taxNo.equalsIgnoreCase(taxNumber)) {
-//                        return new ApiResponse(false, "Tax Number already Exists", null);
-//                    }
-//
-//                    if (uniqueRegNo != null && regNo != null && uniqueRegNo.equalsIgnoreCase(regNo)) {
-//                        return new ApiResponse(false, "Tax Number already Exists", null);
-//                    }
-//                }
-//
-//
-//
-//            if (regNo != null && organizationRepository.existsByRegNo(regNo)) {
-//                return new ApiResponse(false, "Registration number already exists", null);
-//            }
-//
-//            if (taxNumber != null && organizationRepository.existsByTaxNumber(taxNumber)) {
-//                return new ApiResponse(false, "Tax number already exists", null);
-//            }
-//
-//            if (organizationRepository.existsByOrgNameIgnoreCase(dto.getOrganization().getOrgName())) {
-//
-//                return  new ApiResponse(false,"Organization Name already exists",null);
-//            }
-//
-//
-//            OrganizationEntity organizationEntity = new OrganizationEntity();
-//
-//            organizationEntity.setOrgName(dto.getOrganization().getOrgName());
-//            organizationEntity.setRegNo(dto.getOrganization().getRegNo());
-//            organizationEntity.setOrgType(dto.getOrganization().getOrgType());
-//            organizationEntity.setTaxNumber(dto.getOrganization().getTaxNumber());
-//            organizationEntity.setAddress(dto.getOrganization().getAddress());
-//            organizationEntity.setOrgEmail(dto.getOrganization().getOrgEmail());
-//            organizationEntity.setStatus("PENDING");
-//
-//            organizationEntity.setCreatedOn(AppUtil.getDate());
-//            organizationEntity.setUpdatedOn(AppUtil.getDate());
-//
-//            try {
-//                organizationEntity.setSpocAuthorizationLetter(Base64.getEncoder().encodeToString(spocAuthLetter.getBytes()));
-//                organizationEntity.setOrganizationLetter(Base64.getEncoder().encodeToString(organizationLetter.getBytes()));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//
-//            organizationEntity = organizationRepository.save(organizationEntity);
-//
-//
-//
-//
-//            SpocEntity spoc = new SpocEntity();
-//            spoc.setOrgDetailsId(organizationEntity.getId());
-//            spoc.setSpocName(dto.getSpocDetails().getSpocName());
-//            spoc.setSpocOfficalEmail(dto.getSpocDetails().getSpocOfficalEmail());
-//            spoc.setSpocDocumentNumber(dto.getSpocDetails().getSpocDocumentNumber());
-//            spoc.setCreatedOn(AppUtil.getDate());
-//            spoc.setUpdatedOn(AppUtil.getDate());
-//
-//            // Save SPOC
-//            spoc = spocRepository.save(spoc);
-//
-//
-//            if (dto.getAuditorDetails() != null) {
-//
-//                AuditorEntity auditor = new AuditorEntity();
-//                auditor.setOrgDetailsId(organizationEntity.getId());
-//                auditor.setAuditorName(dto.getAuditorDetails().getAuditorName());
-//                auditor.setAuditorDocumentNumber(dto.getAuditorDetails().getAuditorDocumentNumber());
-//                auditor.setAuditorOfficialEmail(dto.getAuditorDetails().getAuditorOfficalEmail());
-//                auditor.setCreatedOn(AppUtil.getDate());
-//                auditor.setUpdatedOn(AppUtil.getDate());
-//
-//                auditorRepository.save(auditor);
-//            }
-//
-//            String subject = "Onboarding Approval Request submitted";
-//
-//            String htmlContent =
-//                    "<html>" +
-//                            "<body style='font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #000;'>" +
-//
-//                            "<p>Greetings!</p>" +
-//
-//                            "<p>" +
-//                            "Administrator,<br/>" +
-//                            "The SPOC has submitted an onboarding request for the organization " +
-//                            "<strong>" + orgName + "</strong>." +
-//                            "</p>" +
-//
-//                            "<p>Kindly do the needful.</p>" +
-//
-//                            "<p>Thanks!</p>" +
-//
-//                            "</body>" +
-//                            "</html>";
-//
-//
-//            ApiResponse res1= emailService.getAdminEmailList();
-//            if(res.isSuccess()){
-//                List<String> adminEmails = (List<String>) res.getResult();
-//                if(!adminEmails.isEmpty()){
-//                    emailService.sendEmailForAdmin(adminEmails, htmlContent, subject);
-//                }
-//
-//            }
-//
-//            return new ApiResponse<>(
-//                    true,
-//                    "The organization details have been submitted successfully and are awaiting approval.", null);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return new ApiResponse(false,"Something went wrong",null);
-//        }
-//
-//    }
-
-//    private void validatePdf(MultipartFile file, String name) {
-//
-//        if (file == null || file.isEmpty()) {
-//            throw new ValidationException(name + " is mandatory");
-//        }
-//
-//        if (!"application/pdf".equalsIgnoreCase(file.getContentType())) {
-//            throw new ValidationException(name + " must be PDF");
-//        }
-//
-//        long maxSizeBytes = maxPdfSizeKb * 1024;
-//
-//        if (file.getSize() > maxSizeBytes) {
-//            throw new ValidationException(
-//                    name + " must not exceed " + maxPdfSizeKb + " KB"
-//            );
-//        }
-//    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -320,7 +149,6 @@ import java.util.stream.Collectors;
                     throw new ValidationException(meta.getDocumentLabel() + " is mandatory");
                 }
 
-                // Validate and Save if file exists
                 if (files != null) {
                     for (MultipartFile file : files) {
                         if (file != null && !file.isEmpty()) {
@@ -339,7 +167,6 @@ import java.util.stream.Collectors;
                 saveAuditor(orgId, dto.getAuditorDetails());
             }
 
-            // 7. Send Admin Email
             notifyAdmin(orgName);
 
             return new ApiResponse<>(true, "The organization details have been submitted successfully and are awaiting approval.", null);
@@ -354,7 +181,7 @@ import java.util.stream.Collectors;
     }
 
     private void validateDocument(MultipartFile file, MetaDocumentEntity meta) {
-        // 1. Size Validation (KB to Bytes)
+
         long maxSizeInBytes = meta.getDocumentSizeKb() * 1024;
         if (file.getSize() > maxSizeInBytes) {
             throw new ValidationException(meta.getDocumentLabel() + " size exceeds " + meta.getDocumentSizeKb() + " KB");
@@ -380,7 +207,6 @@ import java.util.stream.Collectors;
         doc.setMetaDocumentId(metaDocumentId);
         doc.setDocumentName(file.getOriginalFilename());
         doc.setContentType(file.getContentType());
-        // Convert to Base64 for storage in LongText
         doc.setDocumentData(Base64.getEncoder().encodeToString(file.getBytes()));
         doc.setCreatedOn(AppUtil.getDate());
         organizationDocumentRepository.save(doc);
@@ -429,8 +255,6 @@ import java.util.stream.Collectors;
     }
 
     private void notifyAdmin(String orgName) {
-//        String subject = "Onboarding Approval Request submitted";
-//        String htmlContent = "<html><body><p>The SPOC has submitted an onboarding request for <strong>" + orgName + "</strong>.</p></body></html>";
         String subject = "Onboarding Approval Request submitted";
 
         String htmlContent =
@@ -506,13 +330,6 @@ import java.util.stream.Collectors;
 
 
 
-//                if(organizationEntity.getOrganizationLetter()!=null) {
-//                    registerOrganizationDTO.setOtherLegalDocument(organizationEntity.getOrganizationLetter());
-//                }
-//                registerOrganizationDTO.setIncorporation(organizationEntity.getSpocAuthorizationLetter());
-
-
-
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 HttpEntity<Object> reqEntity = new HttpEntity<>(registerOrganizationDTO, headers);
 
@@ -541,15 +358,6 @@ import java.util.stream.Collectors;
                 organizationEntity.setUpdatedOn(AppUtil.getDate());
 
                 organizationRepository.save(organizationEntity);
-
-//                String body =
-//                        "Dear " + spoc.getSpocName() + ",\n\n" +
-//                                "Your organization has been approved.\n\n" +
-//                                "Organization Name: " + organizationEntity.getOrgName() + "\n\n" +
-//                                "You can now access the Service Provider Portal using your existing login credentials.\n\n" +
-//                                "Regards,\n" +
-//                                "Admin\n" +
-//                                portalUrl;
 
 
 
@@ -749,16 +557,17 @@ import java.util.stream.Collectors;
 
             for (OrganizationDocumentEntity orgDoc : orgDocuments) {
 
-                Optional<MetaDocumentEntity> metaOpt =
-                        metaDocumentRepository.findById(orgDoc.getMetaDocumentId());
+                Optional<MetaDocumentEntity> metaOpt = metaDocumentRepository.findById(orgDoc.getMetaDocumentId());
 
                 if (metaOpt.isPresent()) {
                     MetaDocumentEntity meta = metaOpt.get();
 
                     DocumentResponseDTO docDto = new DocumentResponseDTO();
-                    docDto.setDocumentLabel(meta.getDocumentLabel());
+                    docDto.setDocumentName(meta.getDocumentName());
                     docDto.setDocumentType(meta.getDocumentType());
-                    docDto.setDocumentData(orgDoc.getDocumentData());// from meta
+
+
+                    docDto.setDocumentData(portalUrl+"/api/public/download/document/by/id/"+organizationEntity.getId()+"/"+meta.getId()+"/" +meta.getDocumentType());
 
                     documentDtos.add(docDto);
                 }
@@ -787,16 +596,14 @@ import java.util.stream.Collectors;
     public ApiResponse<Page<SpocOrganizationResponseDTO>> getOrganizationsBySpocEmail(String email, int page, int size) {
 
         try {
-            //uncomment for deploy
-//            ApiResponse res = syncDataFromAdmin(email);
+             ApiResponse res = syncDataFromAdmin(email);
+
+
 
             List<SpocEntity> spocList = spocRepository.findAllBySpocOfficalEmail(email);
-
             if (spocList.isEmpty()) {
                 return new ApiResponse<>(false, "No organizations found", Page.empty());
             }
-
-
             List<Long> orgIds = spocList.stream()
                     .map(SpocEntity::getOrgDetailsId)
                     .distinct()
@@ -834,100 +641,28 @@ import java.util.stream.Collectors;
     }
 
 
-
-
-//    @Override
-//    public ApiResponse getDashboardDetails(String spocEmail) {
-//
-//        try {
-//            //uncomment for deploy {
-////            ApiResponse res1 = syncDataFromAdmin(spocEmail);
-////            if(!res1.isSuccess()){
-////                return new ApiResponse<>(false, "Something went wrong", null);
-////            }
-//            //uncomment for deploy  }
-//
-//            DashboardResponseDto dto = new DashboardResponseDto();
-//
-//            // 1. Get all orgs for SPOC
-//            List<OrganizationEntity> orgs =
-//                    organizationRepository.OrganizationsBySpocEmail(spocEmail);
-//
-//            dto.setOrgs(organizationRepository.countOrganizationsBySpocEmail(spocEmail));
-//
-//            long activeCount = 0;
-//            long pendingCount = 0;
-//
-//            // 2. Call API per OUID
-//            for (OrganizationEntity org : orgs) {
-//
-//                String ouid = org.getOuid();
-//
-//                ApiResponse res = apiRequestHandler.handleApiRequest(
-//                        allLicenseOuid + ouid,
-//                        HttpMethod.GET,
-//                        new HttpEntity<>(new HttpHeaders())
-//                );
-//
-//                if (!res.isSuccess() || res.getResult() == null) {
-//                    continue;
-//                }
-//
-//                List<SoftwareLicenseDTO> licenses =
-//                        objectMapper.convertValue(
-//                                res.getResult(),
-//                                new TypeReference<List<SoftwareLicenseDTO>>() {}
-//                        );
-//
-//                // 3. Count statuses
-//                for (SoftwareLicenseDTO lic : licenses) {
-//                    if ("ACTIVE".equalsIgnoreCase(lic.getLicenceStatus())) {
-//                        activeCount++;
-//                    } else if ("PENDING".equalsIgnoreCase(lic.getLicenceStatus())) {
-//                        pendingCount++;
-//                    }
-//                }
-//            }
-//
-//            dto.setActiveLicenses(activeCount);
-//            dto.setPendingLicenses(pendingCount);
-//
-//
-//            dto.setAvailableSoftwares(
-//                    softwareRepository.countByStatusIgnoreCase("PUBLISHED")
-//            );
-//
-//            return new ApiResponse(true, "Fetched", dto);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ApiResponse(false, "Failed to fetch dashboard data", null);
-//        }
-//    }
-
 @Override
 public ApiResponse getDashboardDetails(String spocEmail) {
 
     try {
-        // uncomment for deploy {
-        // ApiResponse res1 = syncDataFromAdmin(spocEmail);
-        // if(!res1.isSuccess()){
-        //     return new ApiResponse<>(false, "Something went wrong", null);
-        // }
-        // uncomment for deploy }
+
+         ApiResponse res1 = syncDataFromAdmin(spocEmail);
+         if(!res1.isSuccess()){
+             return new ApiResponse<>(false, "Something went wrong", null);
+         }
+
+
 
         DashboardResponseDto dto = new DashboardResponseDto();
+        List<OrganizationEntity> orgs = organizationRepository.getAllOrgsBySpocEmail(spocEmail);
 
-        List<OrganizationEntity> orgs =
-                organizationRepository.OrganizationsBySpocEmail(spocEmail);
-
-        long totalApplications = 0;
+        dto.setOrgs(organizationRepository.countActiveOrganizationsBySpocEmail(spocEmail));
+        dto.setTotalApplications(organizationRepository.countApplicationsBySpocEmail(spocEmail));
         long pendingApplications = 0;
         long approvedOrganizations = 0;
 
         for (OrganizationEntity org : orgs) {
 
-            totalApplications++;
 
             if ("PENDING".equalsIgnoreCase(org.getStatus())) {
                 pendingApplications++;
@@ -937,8 +672,6 @@ public ApiResponse getDashboardDetails(String spocEmail) {
             }
         }
 
-        dto.setOrgs(totalApplications);
-        dto.setTotalApplications(totalApplications);
         dto.setPendingApplications(pendingApplications);
         dto.setTotalOrganizations(approvedOrganizations);
 
@@ -1156,7 +889,6 @@ public ApiResponse getDashboardDetails(String spocEmail) {
                 return new ApiResponse(false, "SPOC email cannot be null", null);
             }
 
-            // 1️⃣ Get latest SPOC by email
             Optional<SpocEntity> spocOpt =
                     spocRepository.findTopBySpocOfficalEmailOrderByCreatedOnDesc(spocEmail);
 
@@ -1204,6 +936,27 @@ public ApiResponse getDashboardDetails(String spocEmail) {
             return new ApiResponse(false, "Something went wrong", null);
         }
     }
+
+
+
+    @Override
+    public ResponseEntity<Resource> downloadDocument(Long orgDetailsId, Long documentId, String documentType) {
+
+        OrganizationDocumentEntity doc =
+                organizationDocumentRepository.findByOrgIdAndMetaDocumentId(orgDetailsId, documentId);
+
+        byte[] fileBytes = Base64.getDecoder().decode(doc.getDocumentData());
+
+        ByteArrayResource resource = new ByteArrayResource(fileBytes);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(doc.getContentType()))
+                .contentLength(fileBytes.length)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + doc.getDocumentName() + "\"")
+                .body((Resource) resource);
+    }
+
 
 
 }

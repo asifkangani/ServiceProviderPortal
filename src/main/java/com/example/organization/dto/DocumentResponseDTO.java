@@ -2,16 +2,16 @@ package com.example.organization.dto;
 
 public class DocumentResponseDTO {
 
-    private String documentLabel;
+    private String documentName;
     private String documentType;
     private String documentData;
 
-    public String getDocumentLabel() {
-        return documentLabel;
+    public String getDocumentName() {
+        return documentName;
     }
 
-    public void setDocumentLabel(String documentLabel) {
-        this.documentLabel = documentLabel;
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
     }
 
     public String getDocumentType() {
@@ -33,7 +33,7 @@ public class DocumentResponseDTO {
     @Override
     public String toString() {
         return "DocumentResponseDTO{" +
-                "documentLabel='" + documentLabel + '\'' +
+                "documentLabel='" + documentName + '\'' +
                 ", documentType='" + documentType + '\'' +
                 ", documentData='" + documentData + '\'' +
                 '}';

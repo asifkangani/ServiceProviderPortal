@@ -244,6 +244,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
             }
 
             if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+                System.out.println("DB Password and Current Password did not macth");
                 return new ApiResponse(false, "Current password is incorrect", null);
             }
 

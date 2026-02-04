@@ -3,113 +3,121 @@
 
 <th:block th:fragment="layout(content, pageCss, pageScripts)">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Provider Portal</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Service Provider Portal</title>
+        <link th:href="@{/assets/css/fonts.css}" rel="stylesheet">
+        <link th:href="@{/css/loader.css}" rel="stylesheet">
+        <link th:href="@{/css/styles.css}" rel="stylesheet">
+        <link th:href="@{/css/portal_layout.css}" rel="stylesheet">
 
-    <!-- GLOBAL / PORTAL CSS -->
-    <link th:href="@{/assets/css/fonts.css}" rel="stylesheet">
-    <link th:href="@{/css/loader.css}" rel="stylesheet">
-    <link th:href="@{/css/styles.css}" rel="stylesheet">
 
-    <!-- PAGE-SPECIFIC CSS (Dashboard etc.) -->
-    <th:block th:if="${pageCss != null}"
-              th:replace="${pageCss}"></th:block>
-</head>
+        <th:block th:if="${pageCss != null}" th:replace="${pageCss}"></th:block>
+    </head>
 
-<body>
+    <body>
 
-<div class="app-container">
+        <div class="app-container">
 
-    <!-- Global Loader -->
-    <div id="global-loader" class="loader-overlay hidden">
-        <div class="loader-card">
-            <div class="spinner"></div>
-            <p>Loading, please wait...</p>
-        </div>
-    </div>
+            <div id="global-loader" class="loader-overlay hidden">
+                <div class="loader-card">
+                    <div class="spinner"></div>
+                    <p>Loading, please wait...</p>
+                </div>
+            </div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
 
-        <div class="sidebar-top">
-            <div class="brand">
-                <div class="logo-container">
-                    <div class="section-icon">
-                        <img th:src="@{/icons/building.svg}" class="section-icon-img">
+            <header class="navbar">
+                <div class="navbar-container">
+
+                    <div class="brand">
+                        <div class="logo-container">
+                            <div class="section-icon">
+                                <img th:src="@{/icons/building.svg}" class="section-icon-img">
+                            </div>
+                        </div>
+                        <h1 class="brand-title" th:text="${portalName}"></h1>
+                    </div>
+
+
+                    <nav class="nav-menu">
+                        <a th:onclick="showLoader()" th:href="@{/dashboard}" class="nav-item"
+                            th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
+                            <img th:src="@{/icons/squares-four.svg}" style="width:20px">
+                            <span>Dashboard</span>
+                        </a>
+
+                        <a th:onclick="showLoader()" th:href="@{/organizations}" class="nav-item"
+                            th:classappend="${activePage == 'organizations'} ? 'active' : ''">
+                            <img th:src="@{/icons/buildings.svg}" style="width:20px">
+                            <span>Organizations</span>
+                        </a>
+
+
+                        <a th:onclick="showLoader()" th:href="@{/create-organization}" class="nav-item"
+                            th:classappend="${activePage == 'create-organization'} ? 'active' : ''">
+                            <img th:src="@{/icons/plus-circle.svg}" style="width:20px">
+                            <span>New Application</span>
+                        </a>
+                    </nav>
+
+
+                    <div class="navbar-right">
+                        <div class="user-profile">
+                            <div class="user-info">
+                                <span class="user-name" th:text="${userName}"></span>
+                                <span class="user-email" th:text="${userEmail}"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="profile-dropdown">
+                            <button class="profile-btn" type="button" onclick="toggleProfileMenu(event)">
+                                <img th:src="@{/icons/user.svg}" style="width:18px">
+                            </button>
+
+                            <div class="dropdown-menu" id="profileMenu">
+                                <a th:href="@{/profile}" class="dropdown-item">
+                                    <img th:src="@{/icons/user.svg}" style="width:16px">
+                                    <span>Profile</span>
+                                </a>
+                                <form th:action="@{/logout}" method="post" style="display:inline;">
+                                    <button type="submit" class="dropdown-item" style="color: #dc2626;">
+                                        <img th:src="@{/icons/sign-out.svg}" style="width:16px">
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
+
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                <h1 class="brand-title" th:text="${portalName}"></h1>
+            </header>
+
+
+            <div class="content-wrapper">
+                <main class="main-content">
+                    <th:block th:replace="${content}"></th:block>
+                </main>
             </div>
-
-            <nav class="nav-menu">
-
-                <a th:onclick="showLoader()" th:href="@{/dashboard}" class="nav-item"
-                   th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
-                    <img th:src="@{/icons/squares-four.svg}" style="width:22px">
-                    <span>Dashboard</span>
-                </a>
-
-                <a th:onclick="showLoader()" th:href="@{/organizations}" class="nav-item"
-                   th:classappend="${activePage == 'organizations'} ? 'active' : ''">
-                    <img th:src="@{/icons/buildings.svg}" style="width:22px">
-                    <span>Organizations</span>
-                </a>
-
-                <a th:onclick="showLoader()" th:href="@{/profile}" class="nav-item"
-                   th:classappend="${activePage == 'profile'} ? 'active' : ''">
-                    <img th:src="@{/icons/user.svg}" style="width:22px">
-                    <span>Profile</span>
-                </a>
-
-            </nav>
-        </div>
-
-        <div class="sidebar-bottom">
-
-            <div class="user-profile">
-                <img th:src="@{/icons/user.svg}" style="width:22px;height:22px">
-                <div class="user-info">
-                    <span class="user-name" th:text="${userName}"></span>
-                    <span class="user-email" th:text="${userEmail}"></span>
-                </div>
-            </div>
-
-            <button class="logout-btn"
-                    onclick="document.getElementById('logoutForm').submit();">
-                <img th:src="@{/icons/sign-out.svg}" style="width:14px">
-                <span>Logout</span>
-            </button>
-
-            
-
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="content-wrapper">
-        <main class="main-content">
-            <th:block th:replace="${content}"></th:block>
-        </main>
-
-        <footer class="app-footer">
-            <div class="footer-right">
+            <footer class="app-footer">
+                <div class="footer-right">
                     <img th:src="@{/img/footer_logo.png}" alt="Portal Logo" class="footer-logo">
                 </div>
-        </footer>
-    </div>
+            </footer>
+        </div>
 
-</div>
+        <form id="logoutForm" th:action="@{/logout}" method="post"></form>
 
-<form id="logoutForm" th:action="@{/logout}" method="post"></form>
+        <script th:src="@{/js/loader.js}"></script>
 
-<script th:src="@{/js/loader.js}"></script>
+        <th:block th:if="${pageScripts != null}" th:replace="${pageScripts}">
+        </th:block>
 
-<th:block th:if="${pageScripts != null}"
-          th:replace="${pageScripts}">
+    </body>
 </th:block>
 
-</body>
-</th:block>
 </html>

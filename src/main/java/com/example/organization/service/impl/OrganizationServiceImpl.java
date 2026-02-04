@@ -794,7 +794,7 @@ public ApiResponse getDashboardDetails(String spocEmail) {
         newForm.setAddress(viewForm.getCorporateOfficeAddress());
         newForm.setOrgEmail(viewForm.getOrganizationEmail());
 
-        newForm.setOrgType("Government");
+        newForm.setOrgType("government");
         newForm.setStatus("ACTIVE");
         newForm.setOrgAddedByAdmin(true);
         newForm.setCreatedOn(viewForm.getCreatedDate());

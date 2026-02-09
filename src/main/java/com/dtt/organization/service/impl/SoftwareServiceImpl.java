@@ -94,7 +94,13 @@ public class SoftwareServiceImpl implements SoftwareService {
             if ("publish".equalsIgnoreCase(action)) {
 
                 if ("PUBLISHED".equalsIgnoreCase(software.getStatus())) {
-                    return new ApiResponse(false,"Software already published", null);
+                    return new ApiResponse(false, "Software already published", null);
+                }
+
+                boolean alreadyPublished = softwareRepository.existsByStatusIgnoreCase("PUBLISHED");
+
+                if (alreadyPublished) {
+                    return new ApiResponse(false, "Another software is already published. Unpublish it first.", null);
                 }
 
                 software.setStatus("PUBLISHED");

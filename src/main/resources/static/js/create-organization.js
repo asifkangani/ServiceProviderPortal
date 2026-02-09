@@ -10,8 +10,37 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchCategories();
   
     fetchMetaDocuments();
+    addLiveEmailValidation("orgEmail");
+    addLiveEmailValidation("auditor-email");
 });
+function addLiveEmailValidation(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
 
+    input.addEventListener("input", function () {
+        const email = input.value.trim();
+        const errorEl = input.closest(".form-group").querySelector(".error-msg");
+
+        if (!email) {
+            input.classList.remove("error");
+            errorEl.style.display = "none";
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            input.classList.add("error");
+            errorEl.textContent = "Invalid email format";
+            errorEl.style.display = "block";
+        } else {
+            input.classList.remove("error");
+            errorEl.style.display = "none";
+        }
+    });
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 function changeStep(n) {
     if (n === 1 && !validateCurrentStep()) return;
@@ -23,7 +52,7 @@ function changeStep(n) {
     currentStep += n;
     steps[currentStep - 1].classList.add("active");
 
-    
+
     indicators.forEach((ind, idx) => {
         ind.classList.remove("active");
         if (idx + 1 === currentStep) ind.classList.add("active");
@@ -41,7 +70,7 @@ function changeStep(n) {
 
 async function fetchMetaDocuments() {
     try {
-        
+
         const response = await fetch(portalUrl + "/api/meta-documents");
         const data = await response.json();
         if (data.success) {
@@ -77,15 +106,15 @@ function renderDocumentFields() {
                     <span style="font-weight:bold;">✓</span> Document uploaded successfully
                 </div>
 
-                <div class="upload-zone" id="zone-${doc.id}" onclick="document.getElementById('input-${doc.id}').click()" 
+                <div class="upload-zone" id="zone-${doc.id}" onclick="document.getElementById('input-${doc.id}').click()"
                      style="border:1px dashed #d1d5db; border-radius:10px; padding:30px; text-align:center; cursor:pointer; background:#fff;">
                     <div class="upload-zone-content" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
                         <img src="${window.iconPaths.uploadCloud}" style="width:24px;">
                         <span id="text-${doc.id}" style="font-size:14px; color:#374151; font-weight:500;">Click to upload</span>
                     </div>
-                    <input type="file" 
-                           id="input-${doc.id}" 
-                           style="display:none" 
+                    <input type="file"
+                           id="input-${doc.id}"
+                           style="display:none"
                            accept="${doc.documentType.split(',').map(t => '.' + t.trim()).join(',')}"
                            onchange="handleFileSelect(event, ${doc.id})">
                 </div>
@@ -133,7 +162,7 @@ function handleFileSelect(event, id) {
     zone.style.borderColor = "#10b981";
     zone.style.backgroundColor = "#f0fdf4";
 
-   
+
     fileStore[meta.documentLabel] = file;
 }
 
@@ -161,14 +190,20 @@ function validateCurrentStep() {
     container.querySelectorAll('.form-input').forEach(i => i.classList.remove('error'));
 
     if (currentStep === 1) {
-       
+
         container.querySelectorAll('.mandatory').forEach(input => {
             if (!input.value.trim()) {
                 setInputError(input, "Required");
                 isValid = false;
             }
+
         });
-        
+        const orgEmail = document.getElementById("orgEmail");
+    if (orgEmail.value && !isValidEmail(orgEmail.value)) {
+        setInputError(orgEmail, "Invalid email format");
+        isValid = false;
+    }
+
         if (document.getElementById('taxToggle').checked && !document.getElementById('taxNumber').value.trim()) {
             setInputError(document.getElementById('taxNumber'), "Required");
             isValid = false;

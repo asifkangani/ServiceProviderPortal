@@ -72,7 +72,7 @@ public class WalletImpl implements WalletIface {
             return response;
 
         }catch (Exception e){
-            e.printStackTrace();
+              
             return new ApiResponse(false,"Something went wrong",null);
         }
     }
@@ -112,7 +112,7 @@ public class WalletImpl implements WalletIface {
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+              
             return new ApiResponse(false,"Something went wrong",null);
         }
     }

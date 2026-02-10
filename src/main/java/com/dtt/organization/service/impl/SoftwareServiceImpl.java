@@ -124,7 +124,7 @@ public class SoftwareServiceImpl implements SoftwareService {
             return new ApiResponse(true,"Software status updated successfully", null);
 
         } catch (Exception e) {
-            e.printStackTrace();
+             
             return new ApiResponse(false,"Something wemt wrong",null);
         }
     }

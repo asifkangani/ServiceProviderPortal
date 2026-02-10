@@ -37,7 +37,7 @@ public class OrganisationFormsFieldsConfigureImpl
             );
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error in getAllCategories()", e);
             return new ApiResponse(false, "Something went wrong", null);
         }
     }

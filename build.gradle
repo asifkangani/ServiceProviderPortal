@@ -48,6 +48,10 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
     implementation 'org.springframework.vault:spring-vault-core'
 
+    // Security fix: Pin logback dependencies to secure versions
+    implementation 'ch.qos.logback:logback-core:1.5.19'
+    implementation 'ch.qos.logback:logback-classic:1.5.19'
+
 
 
 }

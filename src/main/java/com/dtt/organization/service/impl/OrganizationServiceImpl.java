@@ -444,7 +444,7 @@ import java.util.stream.Collectors;
                 return new ApiResponse<>(false, "send proper status", null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+
             return new ApiResponse(false,"Something went wrong",null);
 
         }

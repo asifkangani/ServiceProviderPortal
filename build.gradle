@@ -49,8 +49,8 @@ dependencies {
     implementation 'org.springframework.vault:spring-vault-core'
 
     // Security fix: Pin logback dependencies to secure versions
-    implementation 'ch.qos.logback:logback-core:1.5.19'
-    implementation 'ch.qos.logback:logback-classic:1.5.19'
+    implementation 'ch.qos.logback:logback-core:1.5.25'
+    implementation 'ch.qos.logback:logback-classic:1.5.25'
 
     // Security fix: Pin netty-codec to secure version
     implementation 'io.netty:netty-codec:4.1.125.Final'

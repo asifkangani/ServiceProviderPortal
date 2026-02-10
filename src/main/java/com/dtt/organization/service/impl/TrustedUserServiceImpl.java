@@ -89,7 +89,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
             return new ApiResponse (true, "Login successful", null);
         }catch (Exception e){
-            e.printStackTrace();
+           
             return new ApiResponse(false,"Something went wrong",null);
 
         }

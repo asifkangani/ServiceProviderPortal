@@ -163,7 +163,7 @@ public class EmailService {
             e.printStackTrace();
             return new ApiResponse(false, "Unexpected Error Occurred", e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            
             return new ApiResponse(false, "Unknown Error Occurred", e.getMessage());
         }
     }

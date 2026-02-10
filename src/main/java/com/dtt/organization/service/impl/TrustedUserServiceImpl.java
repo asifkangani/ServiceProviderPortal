@@ -157,7 +157,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
             return new ApiResponse(true, "Password reset link sent to email", null);
         }catch (Exception e){
-            e.printStackTrace();
+             
             return new ApiResponse(false,"Something went wrong",null);
         }
     }
@@ -197,7 +197,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
             return new ApiResponse(true, "Password reset successful", null);
         }catch (Exception e){
-            e.printStackTrace();
+             
             return new ApiResponse(false,"Something went wrong",null);
         }
 

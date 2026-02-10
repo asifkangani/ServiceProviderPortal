@@ -282,7 +282,7 @@ public class WalletImpl implements WalletIface {
             return fetchWalletCertificateByOuid(organization.getOuid());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // Exception caught and handled
             return new ApiResponse(false, "Something went wrong", null);
         }
     }

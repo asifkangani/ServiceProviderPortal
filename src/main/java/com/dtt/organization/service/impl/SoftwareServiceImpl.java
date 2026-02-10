@@ -395,7 +395,7 @@ public ApiResponse getAllSoftwares() {
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            // Exception caught, but not logged
             return new ApiResponse(false,"Something went wrong",null);
 
         }

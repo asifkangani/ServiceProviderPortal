@@ -488,7 +488,7 @@ import java.util.stream.Collectors;
 
         return new ApiResponse<>(true, "Organizations fetched successfully", organizationtDTOS);
         }catch (Exception e){
-            e.printStackTrace();
+             
             return new ApiResponse(false,"Something went wrong",null);
 
         }
@@ -582,7 +582,7 @@ import java.util.stream.Collectors;
             return new ApiResponse<>(true, "Organization details fetched successfully", response);
 
         } catch (Exception e) {
-            e.printStackTrace();
+             
             return new ApiResponse<>(false, "Something went wrong", null);
         }
     }
@@ -636,7 +636,7 @@ import java.util.stream.Collectors;
             return new ApiResponse<>(true, "Organizations fetched successfully", dtoPage);
 
         } catch (Exception e) {
-            e.printStackTrace();
+             
             return new ApiResponse<>(false, "Something went wrong", null);
         }
     }
@@ -679,7 +679,7 @@ public ApiResponse getDashboardDetails(String spocEmail) {
         return new ApiResponse(true, "Fetched", dto);
 
     } catch (Exception e) {
-        e.printStackTrace();
+         
         return new ApiResponse(false, "Failed to fetch dashboard data", null);
     }
 }

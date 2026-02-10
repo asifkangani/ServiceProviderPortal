@@ -841,7 +841,7 @@ public ApiResponse getDashboardDetails(String spocEmail) {
             return new ApiResponse(true,"Fetched Successfully", responseList);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // Exception handling removed
             return new ApiResponse(false,"something went wrong",null);
         }
     }

@@ -164,7 +164,7 @@ public ApiResponse getAllSoftwares() {
         return new ApiResponse(true, "Software list fetched", response);
 
     } catch (Exception e) {
-        e.printStackTrace();
+        // Exception handled silently
         return new ApiResponse(false, "Something went wrong", null);
     }
 }

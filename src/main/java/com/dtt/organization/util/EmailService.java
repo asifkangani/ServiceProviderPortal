@@ -157,7 +157,7 @@ public class EmailService {
                 return new ApiResponse(false, "Error Fetching Emails", res.getBody().getResult());
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            e.printStackTrace();
+            // Exception handled without printStackTrace()
             return new ApiResponse(false, "Error Fetching Emails", e.getMessage());
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             

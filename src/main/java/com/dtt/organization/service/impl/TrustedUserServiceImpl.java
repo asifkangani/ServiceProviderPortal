@@ -357,7 +357,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
             return new ApiResponse(true,"Trusted user saved successfully",trustedUsersRepository.findAll());
 
         }catch (Exception e){
-            e.printStackTrace();
+            // Exception handled
             return new ApiResponse(false,"Something went wrong",null);
         }
     }

@@ -61,14 +61,6 @@ public class APIRequestHandler {
                 throw new IllegalArgumentException("Host not allowed");
             }
 
-            // 3. Block internal / private IPs
-            InetAddress address = InetAddress.getByName(host);
-            if (address.isAnyLocalAddress()
-                    || address.isLoopbackAddress()
-                    || address.isSiteLocalAddress()) {
-                throw new IllegalArgumentException("Internal addresses are not allowed");
-            }
-
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid or unsafe URL");
         }

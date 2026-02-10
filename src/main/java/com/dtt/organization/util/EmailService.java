@@ -160,7 +160,7 @@ public class EmailService {
             e.printStackTrace();
             return new ApiResponse(false, "Error Fetching Emails", e.getMessage());
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
-            e.printStackTrace();
+            
             return new ApiResponse(false, "Unexpected Error Occurred", e.getMessage());
         } catch (Exception e) {
             

@@ -141,7 +141,7 @@ public class WalletImpl implements WalletIface {
             return new ApiResponse(true,"Fetched Successfully",walletCertRequestsRepo.findAll());
 
         }catch (Exception e){
-            e.printStackTrace();
+            
             return new ApiResponse(false,"Something went wrong",null);
         }
     }

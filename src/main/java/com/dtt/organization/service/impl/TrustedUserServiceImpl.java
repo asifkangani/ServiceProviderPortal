@@ -259,7 +259,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
             return new ApiResponse(true, "Password changed successfully", null);
         }catch (Exception e){
-            e.printStackTrace();
+            // Exception handled silently
             return new ApiResponse(false,"Something went wrong",null);
         }
 

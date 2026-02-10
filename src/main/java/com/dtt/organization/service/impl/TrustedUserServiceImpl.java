@@ -328,7 +328,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            // Exception handled
             return new ApiResponse(false,"Something went wrong",null);
         }
     }

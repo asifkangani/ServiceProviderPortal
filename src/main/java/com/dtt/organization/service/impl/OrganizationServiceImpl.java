@@ -879,7 +879,7 @@ public ApiResponse getDashboardDetails(String spocEmail) {
 
 
         }catch(Exception e){
-            e.printStackTrace();
+            
 
             return new ApiResponse(false,"Somthing went wrong",null);
         }

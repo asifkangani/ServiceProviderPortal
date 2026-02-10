@@ -302,7 +302,7 @@ public ApiResponse getAllSoftwares() {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 

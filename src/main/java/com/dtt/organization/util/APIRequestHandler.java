@@ -1,15 +1,15 @@
 package com.dtt.organization.util;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotationConfiguration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.net.InetAddress;
+import java.net.URI;
 import java.util.List;
 
 @Configuration
@@ -48,17 +48,20 @@ public class APIRequestHandler {
         try {
             URI uri = new URI(url);
 
-            // Allow only http/https
-            if (!List.of("http", "https").contains(uri.getScheme())) {
+            // 1. Allow only http / https
+            if (uri.getScheme() == null ||
+                    (!"http".equalsIgnoreCase(uri.getScheme())
+                            && !"https".equalsIgnoreCase(uri.getScheme()))) {
                 throw new IllegalArgumentException("Invalid URL scheme");
             }
 
+            // 2. Allow only configured hosts
             String host = uri.getHost();
             if (host == null || !allowedHosts.contains(host)) {
                 throw new IllegalArgumentException("Host not allowed");
             }
 
-            // Block internal / private IPs
+            // 3. Block internal / private IPs
             InetAddress address = InetAddress.getByName(host);
             if (address.isAnyLocalAddress()
                     || address.isLoopbackAddress()

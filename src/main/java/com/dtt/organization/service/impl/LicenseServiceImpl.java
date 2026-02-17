@@ -83,6 +83,7 @@ public class LicenseServiceImpl implements LicenseService {
                     .body(resource);
 
         } catch (Exception e) {
+
             logger.error("{} downloadLicense failed | ouid={} | exception={}", CLASS, ouid, e.getMessage(), e);
             throw new RuntimeException("License download failed", e);
         }

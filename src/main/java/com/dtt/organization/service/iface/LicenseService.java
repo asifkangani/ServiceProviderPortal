@@ -9,10 +9,4 @@ public interface LicenseService {
     ApiResponse applyLicense(Long orgId);
 
     ResponseEntity<Resource> downloadLicense(String ouid,String type);
-
-
-
-
-
-
 }

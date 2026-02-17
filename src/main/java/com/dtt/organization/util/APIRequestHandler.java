@@ -1,7 +1,7 @@
 package com.dtt.organization.util;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotationConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

@@ -27,7 +27,14 @@ public class OrganisationCategoryMappingController {
         return organisationFormsFieldsConfigureIface.getAllCategories();
     }
 
+    @PutMapping("/update/category/label")
+    public ApiResponse updateCategoryLabel(
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) String labelName) {
 
+        return organisationFormsFieldsConfigureIface
+                .updateCategoryLabel(id, labelName);
+    }
 
 
 }

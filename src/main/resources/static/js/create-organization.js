@@ -6,12 +6,20 @@ const fileStore = {};
 const portalUrl = document.getElementById('portalUrl')?.value || '';
 
 document.addEventListener("DOMContentLoaded", function () {
-  
+
     fetchCategories();
-  
     fetchMetaDocuments();
+
     addLiveEmailValidation("orgEmail");
     addLiveEmailValidation("auditor-email");
+    addLiveAlphaNumericValidation("orgName", "Only letters, numbers, and spaces are allowed");
+    addLiveAlphaNumericValidation("taxNumber", "Only letters, numbers, and spaces are allowed");
+    addLiveAlphaNumericValidation("regNo", "Only letters, numbers, and spaces are allowed");
+    addLiveAlphaNumericValidation("spoc-doc", "Only letters, numbers, and spaces are allowed");
+    addLiveAlphaNumericValidation("auditor-name", "Only letters, numbers, and spaces are allowed");
+    addLiveAlphaNumericValidation("auditor-doc", "Only letters, numbers, and spaces are allowed");
+    setupLiveStepValidation();
+
 });
 function addLiveEmailValidation(inputId) {
     const input = document.getElementById(inputId);
@@ -38,8 +46,63 @@ function addLiveEmailValidation(inputId) {
     });
 }
 
+function addLiveAlphaNumericValidation(inputId, errorMessage) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    input.addEventListener("input", function () {
+        const value = input.value;
+        const errorEl = input.closest(".form-group")?.querySelector(".error-msg");
+
+        if (!value.trim()) {
+            input.classList.remove("error");
+            if (errorEl) errorEl.style.display = "none";
+            return;
+        }
+
+        if (!isAlphaNumericSpace(value)) {
+            input.classList.add("error");
+            if (errorEl) {
+                errorEl.textContent = errorMessage;
+                errorEl.style.display = "block";
+            }
+        } else {
+            input.classList.remove("error");
+            if (errorEl) errorEl.style.display = "none";
+        }
+    });
+}
+
+
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function isAlphaNumericSpace(value) {
+    return /^[A-Za-z0-9 ]+$/.test(value);
+}
+
+function setupLiveStepValidation() {
+    document.querySelectorAll(".form-input, input[type='checkbox'], select")
+        .forEach(el => {
+            el.addEventListener("input", updateNavigationButtons);
+            el.addEventListener("change", updateNavigationButtons);
+        });
+
+    updateNavigationButtons(); // initial check
+}
+function updateNavigationButtons() {
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const isValid = validateCurrentStep();
+
+    if (currentStep < 3) {
+        nextBtn.disabled = !isValid;
+        nextBtn.classList.toggle("disabled", !isValid);
+    } else {
+        submitBtn.disabled = !isValid;
+        submitBtn.classList.toggle("disabled", !isValid);
+    }
 }
 
 function changeStep(n) {
@@ -199,10 +262,32 @@ function validateCurrentStep() {
 
         });
         const orgEmail = document.getElementById("orgEmail");
-    if (orgEmail.value && !isValidEmail(orgEmail.value)) {
-        setInputError(orgEmail, "Invalid email format");
-        isValid = false;
-    }
+        if (orgEmail.value && !isValidEmail(orgEmail.value)) {
+            setInputError(orgEmail, "Invalid email format");
+            isValid = false;
+        }
+        const orgName = document.getElementById("orgName");
+        if (orgName.value && !isAlphaNumericSpace(orgName.value)) {
+            setInputError(orgName, "Only letters, numbers, and spaces are allowed");
+            isValid = false;
+        }
+
+        if (document.getElementById('taxToggle').checked) {
+            const tax = document.getElementById("taxNumber");
+            if (tax.value && !isAlphaNumericSpace(tax.value)) {
+                setInputError(tax, "Only letters, numbers, and spaces are allowed");
+                isValid = false;
+            }
+        }
+
+        if (document.getElementById('regToggle').checked) {
+            const reg = document.getElementById("regNo");
+            if (reg.value && !isAlphaNumericSpace(reg.value)) {
+                setInputError(reg, "Only letters, numbers, and spaces are allowed");
+                isValid = false;
+            }
+        }
+
 
         if (document.getElementById('taxToggle').checked && !document.getElementById('taxNumber').value.trim()) {
             setInputError(document.getElementById('taxNumber'), "Required");
@@ -214,7 +299,7 @@ function validateCurrentStep() {
         }
     }
     else if (currentStep === 2) {
-    
+
         metaDocuments.forEach(doc => {
             if (doc.mandatory && !fileStore[doc.documentLabel]) {
                 showError(doc.id, "This document is mandatory");
@@ -223,10 +308,40 @@ function validateCurrentStep() {
         });
     }
     else if (currentStep === 3) {
-        if (!document.getElementById('spoc-doc').value.trim()) {
-            setInputError(document.getElementById('spoc-doc'), "Required");
+
+
+        const spocDoc = document.getElementById("spoc-doc");
+        const value = spocDoc.value.trim();
+
+        if (!value) {
+            setInputError(spocDoc, "Required");
             isValid = false;
         }
+        else if (!isAlphaNumericSpace(value)) {
+            setInputError(spocDoc, "Only letters, numbers, and spaces are allowed");
+            isValid = false;
+        }
+
+        // Auditor (optional but validated if filled)
+        const audName = document.getElementById("auditor-name");
+        const audEmail = document.getElementById("auditor-email");
+        const audDoc = document.getElementById("auditor-doc");
+
+        if (audName.value && !isAlphaNumericSpace(audName.value)) {
+            setInputError(audName, "Only letters, numbers, and spaces are allowed");
+            isValid = false;
+        }
+
+        if (audEmail.value && !isValidEmail(audEmail.value)) {
+            setInputError(audEmail, "Invalid email format");
+            isValid = false;
+        }
+
+        if (audDoc.value && !isAlphaNumericSpace(audDoc.value)) {
+            setInputError(audDoc, "Only letters, numbers, and spaces are allowed");
+            isValid = false;
+        }
+
     }
 
     return isValid;
@@ -253,10 +368,10 @@ async function submitRegistration() {
 
         const formData = new FormData();
 
-  
+
         const fullAddress = `${document.getElementById('addr-building').value.trim()}; ${document.getElementById('addr-area').value.trim()}; ${document.getElementById('addr-country').value}; ${document.getElementById('addr-zip').value.trim()}`;
 
-      
+
         let auditorObj = null;
         const audName = document.getElementById('auditor-name').value.trim();
         const audEmail = document.getElementById('auditor-email').value.trim();
@@ -283,7 +398,7 @@ async function submitRegistration() {
             auditorDetails: auditorObj
         };
 
-   
+
         formData.append('data', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
 
         Object.keys(fileStore).forEach(label => {
